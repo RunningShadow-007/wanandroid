@@ -89,10 +89,9 @@ public abstract class BaseFragment<Param extends IPage.IPageParam, DataBinding e
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         if (layoutId() != 0) {
             dataBinding = DataBindingUtil.inflate(inflater, layoutId(), container, false);
-            initToolbar();
         }
         observeData();
-        initView();
+        initViews();
         return dataBinding != null ? dataBinding.getRoot() : super.onCreateView(inflater, container, savedInstanceState);
     }
 
@@ -106,7 +105,7 @@ public abstract class BaseFragment<Param extends IPage.IPageParam, DataBinding e
 
     }
 
-    protected void initView() {
+    protected void initViews() {
 
     }
 
@@ -149,9 +148,6 @@ public abstract class BaseFragment<Param extends IPage.IPageParam, DataBinding e
         lastToastText = text;
     }
 
-    protected void initToolbar() {
-
-    }
 
     protected void post(Runnable runnable) {
         handler.post(runnable);

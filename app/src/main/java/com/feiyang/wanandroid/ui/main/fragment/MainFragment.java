@@ -66,12 +66,9 @@ public class MainFragment extends BaseFragment<IPage.IPageParam, FragmentMainBin
     }
 
     @Override
-    protected void initView() {
+    protected void initViews() {
 
     }
 
-    @Override
-    protected void initToolbar() {
 
-    }
 }
