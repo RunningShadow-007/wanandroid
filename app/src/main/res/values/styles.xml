@@ -65,7 +65,22 @@
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
-
+    <style name="common_dialog_style" parent="@android:style/Theme.Dialog">
+        <!-- //背景颜色及透明度-->
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <!-- //是否去除边框-->
+        <item name="android:windowFrame">@null</item>
+        <!-- //是否有标题-->
+        <item name="android:windowNoTitle">true</item>
+        <!-- //是否悬浮在activity上-->
+        <item name="android:windowIsFloating">true</item>
+        <!--//是否是透明的-->
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
+        <!-- 是否模糊 -->
+        <item name="android:backgroundDimEnabled">true</item>
+    </style>
 
     <style name="DialogStyle" parent="@android:style/Theme.Dialog">
         <item name="android:windowFrame">@null</item>

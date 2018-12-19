@@ -15,7 +15,6 @@ import android.widget.Toast;
 import com.airbnb.lottie.LottieAnimationView;
 import com.airbnb.lottie.LottieDrawable;
 import com.feiyang.wanandroid.R;
-import com.feiyang.wanandroid.core.util.ScreenUtils;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -74,6 +73,7 @@ public abstract class BaseActivity<Param extends IPage.IPageParam, D extends Vie
             vm = obtainViewModel(this, getVM());
         }
 
+        initViews();
         observeData();
 
     }
@@ -139,19 +139,18 @@ public abstract class BaseActivity<Param extends IPage.IPageParam, D extends Vie
         post(() -> {
             if (isValidContext(this)) {
                 if (mLoadingDialog == null) {
-                    mLoadingDialog = new AlertDialog.Builder(this).create();
+                    mLoadingDialog = new AlertDialog.Builder(this,R.style.common_dialog_style).create();
                     mLoadingDialog.setCanceledOnTouchOutside(false);
                 }
                 LottieAnimationView    loadingView  = new LottieAnimationView(this);
-                ViewGroup.LayoutParams layoutParams = loadingView.getLayoutParams();
-                layoutParams.width = ScreenUtils.getScreenWidth() / 4;
-                layoutParams.height = ScreenUtils.getScreenWidth() / 4;
-                loadingView.setLayoutParams(layoutParams);
+                ViewGroup.LayoutParams params=new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                loadingView.setLayoutParams(params);
                 loadingView.setAnimation(R.raw.loader);
                 loadingView.setRepeatCount(LottieDrawable.INFINITE);
                 loadingView.playAnimation();
-                mLoadingDialog.setContentView(loadingView);
                 mLoadingDialog.show();
+                mLoadingDialog.setContentView(loadingView);
+
             }
         });
 
@@ -177,6 +176,12 @@ public abstract class BaseActivity<Param extends IPage.IPageParam, D extends Vie
     protected void initToolbar() {
 
     }
+
+    protected void initViews() {
+
+    }
+
+    protected void loadData(){}
 
     protected void observeData() {
         if (vm != null) {

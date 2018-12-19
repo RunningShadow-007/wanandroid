@@ -14,7 +14,14 @@ import androidx.annotation.Nullable;
  */
 public class KnowledgeHierarchyFragment extends BaseFragment {
 
+    public static KnowledgeHierarchyFragment newInstance() {
 
+        Bundle args = new Bundle();
+
+        KnowledgeHierarchyFragment fragment = new KnowledgeHierarchyFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

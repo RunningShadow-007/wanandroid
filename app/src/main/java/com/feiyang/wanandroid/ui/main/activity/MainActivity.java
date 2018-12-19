@@ -1,6 +1,5 @@
 package com.feiyang.wanandroid.ui.main.activity;
 
-import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -10,19 +9,89 @@ import com.feiyang.wanandroid.base.BaseActivity;
 import com.feiyang.wanandroid.base.IPage;
 import com.feiyang.wanandroid.core.util.StatusBarUtils;
 import com.feiyang.wanandroid.databinding.ActivityMainBinding;
+import com.feiyang.wanandroid.ui.main.fragment.KnowledgeHierarchyFragment;
+import com.feiyang.wanandroid.ui.main.fragment.MainFragment;
+import com.feiyang.wanandroid.ui.main.fragment.NavigationFragment;
+import com.feiyang.wanandroid.ui.main.fragment.ProjectFragment;
 import com.feiyang.wanandroid.ui.main.vm.MainViewModel;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 
 public class MainActivity extends BaseActivity<MainActivity.Param, ActivityMainBinding, MainViewModel> {
+    private int lastTabIndex = 0;
+
+    private Fragment[] fragments;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void initViews() {
+        super.initViews();
+        setUpFragments();
 
+    }
+
+    private void setUpFragments() {
+        if (fragments == null) {
+            fragments = new Fragment[4];
+        }
+
+        MainFragment               main               = MainFragment.newInstance();
+        KnowledgeHierarchyFragment knowledgeHierarchy = KnowledgeHierarchyFragment.newInstance();
+        NavigationFragment         navigation         = NavigationFragment.newInstance();
+        ProjectFragment            project            = ProjectFragment.newInstance();
+
+        fragments[0] = main;
+        fragments[1] = knowledgeHierarchy;
+        fragments[2] = navigation;
+        fragments[3] = project;
+
+
+        databinding.bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
+            databinding.title.setText(item.getTitle());
+            switch (item.getItemId()) {
+                case R.id.tab_main_pager://主页
+                    if (lastTabIndex != 0) {
+                        switchFragment(0);
+                        vm.getBannerList();
+                        lastTabIndex = 0;
+                    }
+                    break;
+                case R.id.tab_knowledge_hierarchy://知识体系
+                    if (lastTabIndex != 1) {
+                        switchFragment(1);
+                        lastTabIndex = 1;
+                    }
+                    break;
+                case R.id.tab_navigation://导航
+                    if (lastTabIndex != 2) {
+                        switchFragment(2);
+                        lastTabIndex = 2;
+                    }
+                    break;
+                case R.id.tab_project://项目
+                    if (lastTabIndex != 3) {
+                        switchFragment(3);
+                        lastTabIndex = 3;
+                    }
+                    break;
+            }
+            return true;
+        });
+    }
+
+    private void switchFragment(int currentIndex) {
+
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.hide(fragments[lastTabIndex]);
+
+        if (!fragments[currentIndex].isAdded()) {
+            transaction.add(R.id.container, fragments[currentIndex]);
+        }
+        transaction.show(fragments[currentIndex]).commitAllowingStateLoss();
     }
 
     @Override

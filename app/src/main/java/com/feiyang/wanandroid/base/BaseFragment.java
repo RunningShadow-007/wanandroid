@@ -76,8 +76,12 @@ public abstract class BaseFragment<Param extends IPage.IPageParam, DataBinding e
                 param = (Param) getArguments().getSerializable(IPage.PAGE_PARAM);
             }
         }
-        handler=new Handler(Looper.getMainLooper());
-        tid=Process.myTid();
+        handler = new Handler(Looper.getMainLooper());
+        tid = Process.myTid();
+
+        if (getVm() != null) {
+            vm = obtainViewModel((FragmentActivity) mContext, getVm());
+        }
     }
 
     @Nullable
@@ -87,35 +91,22 @@ public abstract class BaseFragment<Param extends IPage.IPageParam, DataBinding e
             dataBinding = DataBindingUtil.inflate(inflater, layoutId(), container, false);
             initToolbar();
         }
-        if (getVm() != null) {
-            obtainViewModel((FragmentActivity) mContext, getVm());
-        }
         observeData();
-        loadData();
         initView();
         return dataBinding != null ? dataBinding.getRoot() : super.onCreateView(inflater, container, savedInstanceState);
     }
 
-    protected void observeData() {
-        if (vm != null) {
-            vm.toast.observe(this, this::showToast);
 
-            vm.loading.observe(this, aBoolean -> {
-                if (aBoolean != null) {
-                    if (aBoolean)
-                        showLoading();
-                    else
-                        hideLoading();
-                }
-            });
-        }
-    }
 
-    protected void loadData(){
+    protected void loadData() {
 
     }
 
-    protected void initView(){
+    protected void observeData(){
+
+    }
+
+    protected void initView() {
 
     }
 
@@ -181,8 +172,9 @@ public abstract class BaseFragment<Param extends IPage.IPageParam, DataBinding e
                 loadingView.setAnimation(R.raw.loader);
                 loadingView.setRepeatCount(LottieDrawable.INFINITE);
                 loadingView.playAnimation();
-                mLoadingDialog.setContentView(loadingView);
                 mLoadingDialog.show();
+                mLoadingDialog.setContentView(loadingView);
+
             }
         });
 

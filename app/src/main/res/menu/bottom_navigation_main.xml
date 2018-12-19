@@ -14,6 +14,7 @@
         android:enabled="true"
         android:icon="@drawable/icon_knowledge_hierarchy_not_selected"
         android:title="@string/knowledge_hierarchy"
+        android:checked="true"
         app:showAsAction="ifRoom" />
 
     <item

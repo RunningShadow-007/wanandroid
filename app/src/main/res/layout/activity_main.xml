@@ -11,7 +11,7 @@
         android:id="@+id/drawer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:openDrawer="start">
+        >
 
         <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:layout_width="match_parent"
@@ -27,10 +27,11 @@
                 <androidx.appcompat.widget.Toolbar
                     android:id="@+id/toolbar"
                     android:layout_width="match_parent"
+                    android:layout_height="54dp"
                     android:background="@color/colorPrimary"
-                    app:navigationIcon="@drawable/ic_arrow_back_white_24dp"
                     app:layout_scrollFlags="scroll|enterAlways"
-                    android:layout_height="54dp">
+                    app:navigationIcon="@drawable/ic_arrow_back_white_24dp">
+
                     <TextView
                         android:id="@+id/title"
                         android:layout_width="wrap_content"
@@ -43,7 +44,7 @@
             </com.google.android.material.appbar.AppBarLayout>
 
             <FrameLayout
-                android:id="@+id/fragment_group"
+                android:id="@+id/container"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior" />
@@ -63,6 +64,7 @@
                 android:layout_gravity="bottom"
                 android:background="@color/colorCard"
                 app:elevation="@dimen/dp_16"
+                app:labelVisibilityMode="labeled"
                 app:itemIconTint="@drawable/nav_item_color_state"
                 app:itemTextColor="@drawable/nav_item_color_state"
                 app:layout_behavior="@string/bye_burger_bottom_behavior"

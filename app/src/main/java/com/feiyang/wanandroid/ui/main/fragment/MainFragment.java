@@ -8,6 +8,8 @@ import com.feiyang.wanandroid.base.IPage;
 import com.feiyang.wanandroid.databinding.FragmentMainBinding;
 import com.feiyang.wanandroid.ui.main.vm.MainViewModel;
 
+import androidx.annotation.Nullable;
+
 /**
  * Copyright:wanandroid2
  * Author: liyang <br>
@@ -28,7 +30,11 @@ public class MainFragment extends BaseFragment<IPage.IPageParam, FragmentMainBin
         return fragment;
     }
 
-
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        loadData();
+    }
 
     @Override
     protected int layoutId() {
@@ -42,13 +48,15 @@ public class MainFragment extends BaseFragment<IPage.IPageParam, FragmentMainBin
 
     @Override
     protected void observeData() {
-        vm.articleList.observe(this, articleBeans -> {
+        if (vm != null) {
+            vm.articleList.observe(this, articleBeans -> {
 
-        });
+            });
 
-        vm.bannerList.observe(this, bannerData -> {
+            vm.bannerList.observe(this, bannerData -> {
 
-        });
+            });
+        }
     }
 
     @Override
