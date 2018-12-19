@@ -64,6 +64,16 @@ public class LoginActivity extends BaseActivity {
 
     }
 
+    @Override
+    protected int layoutId() {
+        return 0;
+    }
+
+    @Override
+    protected Class getVM() {
+        return null;
+    }
+
     /**
      * 切换登录/注册
      */

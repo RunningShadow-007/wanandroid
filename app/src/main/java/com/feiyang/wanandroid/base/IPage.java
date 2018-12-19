@@ -4,7 +4,6 @@ import com.feiyang.wanandroid.ui.login.activity.LoginActivity;
 import com.feiyang.wanandroid.ui.main.activity.MainActivity;
 
 import java.io.Serializable;
-import java.lang.ref.WeakReference;
 
 /**
  * Copyright:wanandroid2
@@ -26,15 +25,8 @@ public interface IPage {
 
         public Class target;
 
-        public WeakReference<IPageParam> pageParam;
+        public IPageParam pageParam;
 
-        public void setPageParam(IPageParam pageParam) {
-            this.pageParam = new WeakReference<>(pageParam);
-        }
-
-        public WeakReference<IPageParam> getPageParam() {
-            return pageParam;
-        }
 
         PageName(Class target) {
             this.target = target;

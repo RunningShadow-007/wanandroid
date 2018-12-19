@@ -1,6 +1,6 @@
 package com.feiyang.wanandroid.core.net.interceptor;
 
-import com.feiyang.wanandroid.util.NetworkUtils;
+import com.feiyang.wanandroid.core.util.NetworkUtils;
 
 import java.io.IOException;
 

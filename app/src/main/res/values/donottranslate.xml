@@ -2,7 +2,7 @@
 <resources>
 
     //behavior
-    <string name="scale_down_show_behavior" translatable="false">json.chao.com.wanandroid.widget.behavior.ScaleDownShowBehavior</string>
+    <string name="scale_down_show_behavior" translatable="false">com.feiyang.wanandroid.core.widget.behaivior.ScaleDownShowBehavior</string>
 
     <string name="error_tips" translatable="false">不妙！加载失败了ヽ(≧Д≦)ノ\n 告诉大佬一些可能的原因：\n1.不可直视的网络环境\n 2.服务器大哥的不定期抽风\n 3.WanAndroid眼冒金星拒绝服务喔~</string>
     <string name="about_content" translatable="false"><![CDATA[

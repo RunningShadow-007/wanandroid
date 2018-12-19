@@ -6,7 +6,7 @@ import android.util.Log;
 import com.feiyang.wanandroid.App;
 import com.feiyang.wanandroid.base.BaseResponse;
 import com.feiyang.wanandroid.base.ScheduleTransformer;
-import com.feiyang.wanandroid.core.UiUtils;
+import com.feiyang.wanandroid.core.util.UiUtils;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

@@ -1,6 +1,6 @@
 package com.feiyang.wanandroid.core.net.interceptor;
 
-import com.feiyang.wanandroid.util.SpUtils;
+import com.feiyang.wanandroid.core.util.SpUtils;
 
 import java.io.IOException;
 

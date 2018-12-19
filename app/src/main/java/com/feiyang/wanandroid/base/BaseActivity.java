@@ -15,10 +15,12 @@ import android.widget.Toast;
 import com.airbnb.lottie.LottieAnimationView;
 import com.airbnb.lottie.LottieDrawable;
 import com.feiyang.wanandroid.R;
-import com.feiyang.wanandroid.util.ScreenUtils;
+import com.feiyang.wanandroid.core.util.ScreenUtils;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
+import androidx.databinding.ViewDataBinding;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProviders;
@@ -32,7 +34,7 @@ import io.reactivex.disposables.Disposable;
  * Desc: <br>
  */
 @SuppressLint("Registered")
-public class BaseActivity<Param extends IPage.IPageParam> extends AppCompatActivity implements IPage {
+public abstract class BaseActivity<Param extends IPage.IPageParam, D extends ViewDataBinding, VM extends BaseViewModel> extends AppCompatActivity implements IPage {
     private static final long TOAST_INTERNAL = 2000;
 
     protected CompositeDisposable mDisposable;
@@ -49,18 +51,39 @@ public class BaseActivity<Param extends IPage.IPageParam> extends AppCompatActiv
 
     protected Param mParam;
 
+    protected D databinding;
+
+    protected VM vm;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        initArgs(savedInstanceState);
+
+        tid = Process.myTid();
+        mDisposable = new CompositeDisposable();
+        handler = new Handler(Looper.getMainLooper());
+
+        if (layoutId() != 0) {
+            databinding = DataBindingUtil.setContentView(this, layoutId());
+            initToolbar();
+        }
+
+        if (getVM() != null) {
+            vm = obtainViewModel(this, getVM());
+        }
+
+        observeData();
+
+    }
+
+    private void initArgs(@Nullable Bundle savedInstanceState) {
         if (savedInstanceState != null) {
             mParam = (Param) savedInstanceState.getSerializable(IPage.PAGE_PARAM);
         } else {
             mParam = (Param) getIntent().getSerializableExtra(IPage.PAGE_PARAM);
         }
-        tid = Process.myTid();
-        mDisposable = new CompositeDisposable();
-        handler = new Handler(Looper.getMainLooper());
     }
 
     @Override
@@ -71,6 +94,10 @@ public class BaseActivity<Param extends IPage.IPageParam> extends AppCompatActiv
 
     protected boolean add(Disposable... disposable) {
         return mDisposable.addAll(disposable);
+    }
+
+    protected void showToast(String text) {
+        showToast(text, false);
     }
 
     protected void showToast(final String text, final boolean isLong) {
@@ -143,6 +170,30 @@ public class BaseActivity<Param extends IPage.IPageParam> extends AppCompatActiv
         return !(a.isDestroyed() || a.isFinishing());
     }
 
+    protected abstract int layoutId();
+
+    protected abstract Class<VM> getVM();
+
+    protected void initToolbar() {
+
+    }
+
+    protected void observeData() {
+        if (vm != null) {
+            vm.loading.observe(this, aBoolean -> {
+                if (aBoolean != null) {
+                    if (aBoolean)
+                        showLoading();
+                    else
+                        hideLoading();
+                }
+            });
+
+            vm.toast.observe(this, this::showToast);
+        }
+    }
+
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -151,20 +202,24 @@ public class BaseActivity<Param extends IPage.IPageParam> extends AppCompatActiv
             mLoadingDialog.dismiss();
             mLoadingDialog = null;
         }
+        if (vm != null) {
+            vm.dispose();
+        }
     }
 
     @Override
     public void startPage(PageName pageName) {
         Intent intent = new Intent(this, pageName.target);
-        intent.putExtra(IPage.PAGE_PARAM, mParam);
+        intent.putExtra(IPage.PAGE_PARAM, pageName.pageParam);
+        pageName.pageParam = null;
         startActivity(intent);
     }
 
     @Override
     public void startPageForResult(PageName pageName, int requestCode) {
-        Intent     intent = new Intent(this, pageName.target);
-        IPageParam param  = pageName.pageParam.get();
-        intent.putExtra(IPage.PAGE_PARAM, param);
+        Intent intent = new Intent(this, pageName.target);
+        intent.putExtra(IPage.PAGE_PARAM, pageName.pageParam);
+        pageName.pageParam = null;
         startActivityForResult(intent, requestCode);
     }
 

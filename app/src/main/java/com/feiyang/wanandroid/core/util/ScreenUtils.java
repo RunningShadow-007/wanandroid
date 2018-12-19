@@ -1,4 +1,4 @@
-package com.feiyang.wanandroid.util;
+package com.feiyang.wanandroid.core.util;
 
 import android.app.Activity;
 import android.app.KeyguardManager;

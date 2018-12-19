@@ -1,8 +1,8 @@
 package com.feiyang.wanandroid.core.net;
 
 import com.feiyang.wanandroid.base.BaseResponse;
-import com.feiyang.wanandroid.ui.login.model.bean.ArticlesData;
-import com.feiyang.wanandroid.ui.login.model.bean.BannerData;
+import com.feiyang.wanandroid.ui.main.model.bean.ArticlesData;
+import com.feiyang.wanandroid.ui.main.model.bean.BannerData;
 
 import java.util.List;
 

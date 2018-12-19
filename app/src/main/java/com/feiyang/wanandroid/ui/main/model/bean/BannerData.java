@@ -1,4 +1,4 @@
-package com.feiyang.wanandroid.ui.login.model.bean;
+package com.feiyang.wanandroid.ui.main.model.bean;
 
 import android.os.Parcel;
 import android.os.Parcelable;

@@ -1,4 +1,4 @@
-package com.feiyang.wanandroid.util;
+package com.feiyang.wanandroid.core.util;
 
 import android.util.DisplayMetrics;
 import android.util.TypedValue;

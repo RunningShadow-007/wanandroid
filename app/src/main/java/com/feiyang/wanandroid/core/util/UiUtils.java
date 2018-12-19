@@ -1,4 +1,4 @@
-package com.feiyang.wanandroid.core;
+package com.feiyang.wanandroid.core.util;
 
 import android.widget.Toast;
 
@@ -20,6 +20,13 @@ public class UiUtils {
         }
     }
 
+    public static void showStrictToast(String s) {
+        if (isFastClick()) {
+            return;
+        }
+        showToast(s);
+    }
+
     public static void showLongToast(String text) {
         try {
             Toast toast = Toast.makeText(App.getApp(), text, Toast.LENGTH_LONG);
@@ -37,9 +44,10 @@ public class UiUtils {
             e.printStackTrace();
         }
     }
-    public static void showToastSafe(String text){
+
+    public static void showToastSafe(String text) {
         try {
-            if (!isFastClick()){
+            if (!isFastClick()) {
                 Toast toast = Toast.makeText(App.getApp(), text, Toast.LENGTH_SHORT);
                 toast.show();
             }
@@ -48,7 +56,7 @@ public class UiUtils {
         }
     }
 
-    private static  long lastClickTime;
+    private static long lastClickTime;
 
     public synchronized static boolean isFastClick() {
         long time     = System.currentTimeMillis();

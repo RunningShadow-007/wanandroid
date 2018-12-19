@@ -8,20 +8,53 @@
     </data>
 
     <androidx.drawerlayout.widget.DrawerLayout
+        android:id="@+id/drawer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:openDrawer="start">
 
-        <LinearLayout
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="match_parent">
+
+            <com.google.android.material.appbar.AppBarLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fitsSystemWindows="false"
+                android:theme="@style/AppTheme.AppBarOverlay"
+                app:elevation="@dimen/dp_0">
+
+                <androidx.appcompat.widget.Toolbar
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:background="@color/colorPrimary"
+                    app:navigationIcon="@drawable/ic_arrow_back_white_24dp"
+                    app:layout_scrollFlags="scroll|enterAlways"
+                    android:layout_height="54dp">
+                    <TextView
+                        android:id="@+id/title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/sp_16"
+                        tools:text="主页" />
+                </androidx.appcompat.widget.Toolbar>
+            </com.google.android.material.appbar.AppBarLayout>
 
             <FrameLayout
-                android:id="@+id/container"
-                android:layout_weight="1"
+                android:id="@+id/fragment_group"
                 android:layout_width="match_parent"
-                android:layout_height="0dp" />
+                android:layout_height="match_parent"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/main_floating_action_btn"
+                style="@style/style_float_btn"
+                android:layout_marginEnd="@dimen/dp_16"
+                android:layout_marginBottom="@dimen/dp_60"
+                android:src="@mipmap/icon_up_arrow"
+                app:layout_behavior="@string/scale_down_show_behavior" />
 
             <com.google.android.material.bottomnavigation.BottomNavigationView
                 android:id="@+id/bottom_navigation_view"
@@ -32,9 +65,9 @@
                 app:elevation="@dimen/dp_16"
                 app:itemIconTint="@drawable/nav_item_color_state"
                 app:itemTextColor="@drawable/nav_item_color_state"
+                app:layout_behavior="@string/bye_burger_bottom_behavior"
                 app:menu="@menu/bottom_navigation_main" />
-        </LinearLayout>
-
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
         <com.google.android.material.navigation.NavigationView
             android:id="@+id/navView"

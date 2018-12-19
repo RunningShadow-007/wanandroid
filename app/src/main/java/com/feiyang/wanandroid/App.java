@@ -7,7 +7,7 @@ import android.text.TextUtils;
 import com.bumptech.glide.Glide;
 import com.facebook.stetho.Stetho;
 import com.feiyang.wanandroid.ui.login.activity.LoginActivity;
-import com.feiyang.wanandroid.util.SpUtils;
+import com.feiyang.wanandroid.core.util.SpUtils;
 
 /**
  * Copyright:wanandroid2

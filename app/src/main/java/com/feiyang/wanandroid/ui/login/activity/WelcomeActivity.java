@@ -30,4 +30,14 @@ public class WelcomeActivity extends BaseActivity {
         }
     }
 
+    @Override
+    protected int layoutId() {
+        return 0;
+    }
+
+    @Override
+    protected Class getVM() {
+        return null;
+    }
+
 }
