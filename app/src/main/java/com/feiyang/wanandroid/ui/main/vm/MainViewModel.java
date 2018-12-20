@@ -12,6 +12,7 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 
 /**
  * Copyright:wanandroid2
@@ -26,6 +27,10 @@ public class MainViewModel extends BaseViewModel {
 
     public MutableLiveData<List<BannerData>> bannerList = new MutableLiveData<>();
 
+    public MutableLiveData<Void> isLoadFailed = new MutableLiveData<>();
+
+    public MutableLiveData<Integer> pageCount = new MutableLiveData<>();
+
     public MainViewModel(@NonNull Application application) {
         super(application);
         mRepository = MainRepository.getInstance();
@@ -33,8 +38,6 @@ public class MainViewModel extends BaseViewModel {
 
     public void getBannerList() {
         Disposable subscribe = mRepository.getBannerList()
-                                          .doOnSubscribe(disposable -> loading.postValue(true))
-                                          .doOnTerminate(() -> loading.postValue(false))
                                           .subscribe(bannerData -> bannerList.postValue(bannerData));
         disposable.add(subscribe);
     }
@@ -45,8 +48,14 @@ public class MainViewModel extends BaseViewModel {
                                               loading.postValue(true);
                                           })
                                           .doOnTerminate(() -> loading.postValue(false))
-                                          .subscribe(bannerData -> {
-                                              articleList.postValue(bannerData.getDatas());
+                                          .subscribe(articlesData -> {
+                                              pageCount.postValue(articlesData.getPageCount());
+                                              articleList.postValue(articlesData.getDatas());
+                                          }, new Consumer<Throwable>() {
+                                              @Override
+                                              public void accept(Throwable throwable) throws Exception {
+                                                  isLoadFailed.postValue(null);
+                                              }
                                           });
         disposable.add(subscribe);
     }

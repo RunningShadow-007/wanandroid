@@ -100,6 +100,6 @@ public class Banner extends ViewPager {
 
     private void startPlay() {
         mHandler.removeCallbacks(mAutoPlayTask);
-        mHandler.postDelayed(mAutoPlayTask, 1000);
+        mHandler.postDelayed(mAutoPlayTask, 1500);
     }
 }

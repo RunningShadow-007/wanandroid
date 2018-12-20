@@ -20,11 +20,10 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.databinding.ViewDataBinding;
-import androidx.fragment.app.FragmentActivity;
-import androidx.lifecycle.ViewModel;
-import androidx.lifecycle.ViewModelProviders;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
+
+import static com.feiyang.wanandroid.core.util.ViewModelUtils.obtainViewModel;
 
 /**
  * Copyright:wanandroid2
@@ -140,7 +139,7 @@ public abstract class BaseActivity<Param extends IPage.IPageParam, D extends Vie
             if (isValidContext(this)) {
                 if (mLoadingDialog == null) {
                     mLoadingDialog = new AlertDialog.Builder(this,R.style.common_dialog_style).create();
-                    mLoadingDialog.setCanceledOnTouchOutside(false);
+                    mLoadingDialog.setCanceledOnTouchOutside(true);
                 }
                 LottieAnimationView    loadingView  = new LottieAnimationView(this);
                 ViewGroup.LayoutParams params=new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -184,18 +183,7 @@ public abstract class BaseActivity<Param extends IPage.IPageParam, D extends Vie
     protected void loadData(){}
 
     protected void observeData() {
-        if (vm != null) {
-            vm.loading.observe(this, aBoolean -> {
-                if (aBoolean != null) {
-                    if (aBoolean)
-                        showLoading();
-                    else
-                        hideLoading();
-                }
-            });
 
-            vm.toast.observe(this, this::showToast);
-        }
     }
 
 
@@ -228,8 +216,6 @@ public abstract class BaseActivity<Param extends IPage.IPageParam, D extends Vie
         startActivityForResult(intent, requestCode);
     }
 
-    public static <T extends ViewModel> T obtainViewModel(FragmentActivity activity, Class<T> clazz) {
-        return ViewModelProviders.of(activity).get(clazz);
-    }
+
 
 }

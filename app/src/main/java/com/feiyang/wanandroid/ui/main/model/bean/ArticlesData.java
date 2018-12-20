@@ -202,7 +202,7 @@ public class ArticlesData implements Parcelable{
 
         private int     zan;
 
-        private List<?> tags;
+        private List<TagBean> tags;
 
         protected ArticleBean(Parcel in) {
             apkLink = in.readString();
@@ -448,12 +448,61 @@ public class ArticlesData implements Parcelable{
             this.zan = zan;
         }
 
-        public List<?> getTags() {
+        public List<TagBean> getTags() {
             return tags;
         }
 
-        public void setTags(List<?> tags) {
+        public void setTags(List<TagBean> tags) {
             this.tags = tags;
+        }
+
+        public static class TagBean implements Parcelable{
+            private String name;
+            private String url;
+
+            protected TagBean(Parcel in) {
+                name = in.readString();
+                url = in.readString();
+            }
+
+            @Override
+            public void writeToParcel(Parcel dest, int flags) {
+                dest.writeString(name);
+                dest.writeString(url);
+            }
+
+            @Override
+            public int describeContents() {
+                return 0;
+            }
+
+            public static final Creator<TagBean> CREATOR = new Creator<TagBean>() {
+                @Override
+                public TagBean createFromParcel(Parcel in) {
+                    return new TagBean(in);
+                }
+
+                @Override
+                public TagBean[] newArray(int size) {
+                    return new TagBean[size];
+                }
+            };
+
+            public String getName() {
+                return name == null ? "" : name;
+            }
+
+            public void setName(String name) {
+                this.name = name;
+            }
+
+            public String getUrl() {
+                return url == null ? "" : url;
+            }
+
+            public void setUrl(String url) {
+                this.url = url;
+            }
         }
     }
 }

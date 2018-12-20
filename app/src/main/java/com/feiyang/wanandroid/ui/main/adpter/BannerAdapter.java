@@ -57,7 +57,7 @@ public class BannerAdapter extends PagerAdapter {
         } else {
             pic = (ImageView) mViewCaches.remove(0);
         }
-        Glide.with(container.getContext()).load(getItem(position)).into(pic);
+        Glide.with(container.getContext()).load(getItem(position).getImagePath()).into(pic);
         container.addView(pic);
         return pic;
     }
@@ -68,7 +68,6 @@ public class BannerAdapter extends PagerAdapter {
 
     @Override
     public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
-        super.destroyItem(container, position, object);
         ImageView imageView= (ImageView) object;
         container.removeView(imageView);
         mViewCaches.add(imageView);

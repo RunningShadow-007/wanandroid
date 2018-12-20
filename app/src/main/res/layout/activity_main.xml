@@ -10,8 +10,7 @@
     <androidx.drawerlayout.widget.DrawerLayout
         android:id="@+id/drawer"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
+        android:layout_height="match_parent">
 
         <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:layout_width="match_parent"
@@ -43,8 +42,8 @@
                 </androidx.appcompat.widget.Toolbar>
             </com.google.android.material.appbar.AppBarLayout>
 
-            <FrameLayout
-                android:id="@+id/container"
+            <androidx.viewpager.widget.ViewPager
+                android:id="@+id/vp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior" />
@@ -64,9 +63,9 @@
                 android:layout_gravity="bottom"
                 android:background="@color/colorCard"
                 app:elevation="@dimen/dp_16"
-                app:labelVisibilityMode="labeled"
                 app:itemIconTint="@drawable/nav_item_color_state"
                 app:itemTextColor="@drawable/nav_item_color_state"
+                app:labelVisibilityMode="labeled"
                 app:layout_behavior="@string/bye_burger_bottom_behavior"
                 app:menu="@menu/bottom_navigation_main" />
         </androidx.coordinatorlayout.widget.CoordinatorLayout>

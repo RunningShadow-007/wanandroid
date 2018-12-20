@@ -19,7 +19,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
+import androidx.fragment.app.FragmentStatePagerAdapter;
 
 
 public class MainActivity extends BaseActivity<MainActivity.Param, ActivityMainBinding, MainViewModel> {
@@ -49,50 +49,38 @@ public class MainActivity extends BaseActivity<MainActivity.Param, ActivityMainB
         fragments[2] = navigation;
         fragments[3] = project;
 
+        databinding.vp.setAdapter(new FragmentStatePagerAdapter(getSupportFragmentManager()) {
+            @Override
+            public Fragment getItem(int position) {
+                return fragments[position];
+            }
+
+            @Override
+            public int getCount() {
+                return fragments.length;
+            }
+        });
 
         databinding.bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
             databinding.title.setText(item.getTitle());
             switch (item.getItemId()) {
                 case R.id.tab_main_pager://主页
-                    if (lastTabIndex != 0) {
-                        switchFragment(0);
-                        vm.getBannerList();
-                        lastTabIndex = 0;
-                    }
+                    databinding.vp.setCurrentItem(0);
                     break;
                 case R.id.tab_knowledge_hierarchy://知识体系
-                    if (lastTabIndex != 1) {
-                        switchFragment(1);
-                        lastTabIndex = 1;
-                    }
+                    databinding.vp.setCurrentItem(1);
                     break;
                 case R.id.tab_navigation://导航
-                    if (lastTabIndex != 2) {
-                        switchFragment(2);
-                        lastTabIndex = 2;
-                    }
+                    databinding.vp.setCurrentItem(2);
                     break;
                 case R.id.tab_project://项目
-                    if (lastTabIndex != 3) {
-                        switchFragment(3);
-                        lastTabIndex = 3;
-                    }
+                    databinding.vp.setCurrentItem(3);
                     break;
             }
             return true;
         });
     }
 
-    private void switchFragment(int currentIndex) {
-
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.hide(fragments[lastTabIndex]);
-
-        if (!fragments[currentIndex].isAdded()) {
-            transaction.add(R.id.container, fragments[currentIndex]);
-        }
-        transaction.show(fragments[currentIndex]).commitAllowingStateLoss();
-    }
 
     @Override
     protected int layoutId() {
