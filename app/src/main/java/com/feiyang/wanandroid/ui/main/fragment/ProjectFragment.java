@@ -24,8 +24,4 @@ public class ProjectFragment extends BaseFragment {
         return 0;
     }
 
-    @Override
-    protected Class getVm() {
-        return null;
-    }
 }

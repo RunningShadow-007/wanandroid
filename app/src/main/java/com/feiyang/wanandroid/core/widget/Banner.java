@@ -29,8 +29,11 @@ public class Banner extends ViewPager {
 
     private Handler mHandler;
 
+    private OnPageChangedCallback onPageChangedCallback;
+
     public Banner(@NonNull Context context) {
-        super(context);
+        this(context,null);
+
     }
 
     public Banner(@NonNull Context context, @Nullable AttributeSet attrs) {
@@ -57,7 +60,12 @@ public class Banner extends ViewPager {
         @Override
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
             Log.e("Banner", "onPageScrolled: " + position);
-            mSelectedIndex = position;
+            if (mSelectedIndex != position) {
+                mSelectedIndex = position;
+                if (onPageChangedCallback != null) {
+                    onPageChangedCallback.onPageChanged(String.format("%s/%s", (mSelectedIndex % mData.size()) + 1, mData.size()), getItem().getTitle());
+                }
+            }
         }
 
         @Override
@@ -83,6 +91,11 @@ public class Banner extends ViewPager {
         }
     };
 
+    public BannerData getItem() {
+        int pos = mSelectedIndex % mData.size();
+        return mData.get(pos);
+    }
+
     /**
      * 获取banner的初始位置,即0-Integer.MAX_VALUE之间的大概中间位置
      * 保证初始位置和数据源的第1个元素的取余为0
@@ -98,8 +111,17 @@ public class Banner extends ViewPager {
         return middlePos - pos;
     }
 
+
     private void startPlay() {
         mHandler.removeCallbacks(mAutoPlayTask);
-        mHandler.postDelayed(mAutoPlayTask, 1500);
+        mHandler.postDelayed(mAutoPlayTask, 2500);
+    }
+
+    public interface OnPageChangedCallback {
+        void onPageChanged(String indexTxt, String title);
+    }
+
+    public void setOnPageChangedCallback(OnPageChangedCallback onPageChangedCallback) {
+        this.onPageChangedCallback = onPageChangedCallback;
     }
 }

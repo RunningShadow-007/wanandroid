@@ -3,6 +3,9 @@ package com.feiyang.wanandroid.ui.main.model.bean;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.feiyang.wanandroid.base.BaseItem;
+import com.feiyang.wanandroid.core.constants.Constants;
+
 import java.util.List;
 
 /**
@@ -11,7 +14,7 @@ import java.util.List;
  * Date:2018/11/23 3:25 PM<br>
  * Desc: <br>
  */
-public class ArticlesData implements Parcelable{
+public class ArticlesData implements Parcelable {
 
     /**
      * curPage : 2
@@ -25,15 +28,15 @@ public class ArticlesData implements Parcelable{
 
     private int curPage;
 
-    private int             offset;
+    private int offset;
 
-    private boolean         over;
+    private boolean over;
 
-    private int             pageCount;
+    private int pageCount;
 
-    private int             size;
+    private int size;
 
-    private int             total;
+    private int total;
 
     private List<ArticleBean> datas;
 
@@ -131,7 +134,7 @@ public class ArticlesData implements Parcelable{
         this.datas = datas;
     }
 
-    public static class ArticleBean implements Parcelable {
+    public static class ArticleBean implements Parcelable, BaseItem {
         /**
          * apkLink :
          * author : SupKing_a520
@@ -160,47 +163,47 @@ public class ArticlesData implements Parcelable{
 
         private String apkLink;
 
-        private String  author;
+        private String author;
 
-        private int     chapterId;
+        private int chapterId;
 
-        private String  chapterName;
+        private String chapterName;
 
         private boolean collect;
 
-        private int     courseId;
+        private int courseId;
 
-        private String  desc;
+        private String desc;
 
-        private String  envelopePic;
+        private String envelopePic;
 
         private boolean fresh;
 
-        private int     id;
+        private int id;
 
-        private String  link;
+        private String link;
 
-        private String  niceDate;
+        private String niceDate;
 
-        private String  origin;
+        private String origin;
 
-        private String  projectLink;
+        private String projectLink;
 
-        private long    publishTime;
+        private long publishTime;
 
-        private int     superChapterId;
+        private int superChapterId;
 
-        private String  superChapterName;
+        private String superChapterName;
 
-        private String  title;
+        private String title;
 
-        private int     type;
+        private int type;
 
-        private int     userId;
+        private int userId;
 
-        private int     visible;
+        private int visible;
 
-        private int     zan;
+        private int zan;
 
         private List<TagBean> tags;
 
@@ -456,8 +459,19 @@ public class ArticlesData implements Parcelable{
             this.tags = tags;
         }
 
-        public static class TagBean implements Parcelable{
+        @Override
+        public int getItemType() {
+            return Constants.TYPE_DATA;
+        }
+
+        @Override
+        public ArticleBean getData() {
+            return this;
+        }
+
+        public static class TagBean implements Parcelable {
             private String name;
+
             private String url;
 
             protected TagBean(Parcel in) {

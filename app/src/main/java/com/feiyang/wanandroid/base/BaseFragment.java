@@ -19,8 +19,6 @@ import com.feiyang.wanandroid.R;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModel;
-import androidx.lifecycle.ViewModelProviders;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 
@@ -70,8 +68,6 @@ public abstract class BaseFragment<Param extends IPage.IPageParam> extends Fragm
         tid = Process.myTid();
 
     }
-
-
 
 
 

@@ -32,9 +32,6 @@ public class KnowledgeHierarchyFragment extends BaseFragment {
         return 0;
     }
 
-    @Override
-    protected Class getVm() {
-        return null;
-    }
+
 
 }

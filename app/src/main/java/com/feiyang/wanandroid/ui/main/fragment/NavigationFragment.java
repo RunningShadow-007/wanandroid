@@ -24,8 +24,5 @@ public class NavigationFragment extends BaseFragment {
         return 0;
     }
 
-    @Override
-    protected Class getVm() {
-        return null;
-    }
+
 }

@@ -41,7 +41,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="5dp"
             android:layout_marginBottom="10dp"
-            android:background="#ff00ff"
+            app:imageUrl="@{item.envelopePic}"
             android:scaleType="fitXY"
             android:visibility="@{TextUtils.isEmpty(item.envelopePic)?View.GONE:View.VISIBLE}"
             app:layout_constraintDimensionRatio="4:3"

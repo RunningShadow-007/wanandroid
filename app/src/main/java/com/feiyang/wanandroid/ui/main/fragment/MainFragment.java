@@ -1,17 +1,30 @@
 package com.feiyang.wanandroid.ui.main.fragment;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import com.feiyang.wanandroid.R;
 import com.feiyang.wanandroid.base.BaseFragment;
+import com.feiyang.wanandroid.base.BaseItem;
 import com.feiyang.wanandroid.base.IPage;
+import com.feiyang.wanandroid.core.constants.LoadingType;
+import com.feiyang.wanandroid.core.util.ViewModelUtils;
+import com.feiyang.wanandroid.databinding.FragmentMainBinding;
 import com.feiyang.wanandroid.ui.main.adpter.ArticleAdapter;
-import com.feiyang.wanandroid.ui.main.model.bean.ArticlesData;
+import com.feiyang.wanandroid.ui.main.model.bean.HeaderData;
+import com.feiyang.wanandroid.ui.main.vm.MainViewModel;
+import com.scwang.smartrefresh.layout.footer.ClassicsFooter;
+import com.scwang.smartrefresh.layout.header.ClassicsHeader;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 /**
  * Copyright:wanandroid2
@@ -23,11 +36,17 @@ public class MainFragment extends BaseFragment<IPage.IPageParam> {
 
     private int mCurPage = 0;
 
+    private MainViewModel mVm;
+
+    private FragmentMainBinding mBinding;
+
     private ArticleAdapter mAdapter;
 
-    private List<ArticlesData.ArticleBean> mData = new ArrayList<>();
+    private List<BaseItem> mData = new ArrayList<>();
 
-    private boolean isRefresh=false;
+    private LoadingType mLoadingType = LoadingType.LOADING_ORIGIN;
+
+    private BaseItem mHeaderData=null;
 
     public static MainFragment newInstance() {
         MainFragment fragment = new MainFragment();
@@ -37,7 +56,17 @@ public class MainFragment extends BaseFragment<IPage.IPageParam> {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mVm = ViewModelUtils.obtainViewModel(this, MainViewModel.class);
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        mBinding = FragmentMainBinding.inflate(inflater, container, false);
+        initViews();
+        observeData();
         loadData();
+        return mBinding.getRoot();
     }
 
     @Override
@@ -46,70 +75,69 @@ public class MainFragment extends BaseFragment<IPage.IPageParam> {
     }
 
 
-
     @Override
     protected void observeData() {
-//            vm.articleList.observe(this, articleBeans -> {
-//                dataBinding.refresh.setEnableLoadMore(true);
-//
-//                if (articleBeans != null && articleBeans.size() > 0) {
-//                    if (mCurPage == 0) {//下拉刷新操作
-//                        mData.clear();
-//                        mData.addAll(articleBeans);
-//                        mAdapter.notifyDataSetChanged();
-//                    } else {//加载更多操作
-//                        int oldSize = mData.size();
-//                        mData.addAll(articleBeans);
-//                        mAdapter.notifyItemRangeInserted(oldSize, articleBeans.size());
-//                    }
-//                }
-//            });
-//
-//            vm.bannerList.observe(this, bannerData -> {
-//
-//                if (bannerData != null && !bannerData.isEmpty()) {
-//                    dataBinding.banner.play(bannerData);
-//                }
-//            });
-//
-//            vm.loading.observe(this, aBoolean -> {
-//                if (aBoolean != null) {
-//                    if (isRefresh){
-//                        if (!aBoolean) {
-//                            if (mCurPage == 0) {
-//                                dataBinding.refresh.finishRefresh();
-//                            } else {
-//                                dataBinding.refresh.finishLoadMore();
-//                            }
-//                        }
-//                    }else {
-//                        if (aBoolean){
-//                            showLoading();
-//                        }else {
-//                            hideLoading();
-//                        }
-//                    }
-//
-//                }
-//            });
-//
-//            vm.isLoadFailed.observe(this, aVoid -> {
-//                mCurPage--;
-//                dataBinding.refresh.setEnableLoadMore(true);
-//            });
-//
-//            vm.pageCount.observe(this, page -> {
-//                if (mCurPage == page) {
-//                    Objects.requireNonNull(dataBinding.refresh.getRefreshFooter(), "Refresh footer is null").setNoMoreData(true);
-//                }
-//            });
+        mVm.loading.observe(this, loading -> {
+            if (loading != null) {
+                switch (mLoadingType) {
+                    case LOADING_MORE:
+                        if (!loading) {
+                            mBinding.refresh.finishLoadMore();
+                            mBinding.refresh.setEnableLoadMore(true);
+                        }
+                        break;
+                    case LOADING_ORIGIN:
+                        if (loading)
+                            showLoading();
+                        else
+                            hideLoading();
+                        break;
+                    case LOADING_REFRESH:
+                        if (!loading) {
+                            mBinding.refresh.finishRefresh();
+                        }
+                        break;
+                }
+            }
+        });
 
+        mVm.isLoadFailed.observe(this, aVoid -> {
+            mCurPage--;
+            if (mCurPage < 0) {
+                mCurPage = 0;
+            }
+        });
+
+        mVm.bannerList.observe(this, bannerData -> {
+            mHeaderData= new HeaderData(bannerData);
+            mData.add(0,mHeaderData);
+            mAdapter.notifyItemInserted(0);
+        });
+
+        mVm.articleList.observe(this, articleBeans -> {
+            if (articleBeans != null && articleBeans.size() > 0) {
+                if (mCurPage > 0) {
+                    int oldSize = mData.size();
+                    mData.addAll(articleBeans);
+                    mAdapter.notifyItemRangeInserted(oldSize, articleBeans.size());
+                } else {
+                    mData.clear();
+                    if (mHeaderData!=null){
+                        mData.add(0,mHeaderData);
+                    }else {
+                        mVm.getBannerList();
+                    }
+                    mData.addAll(articleBeans);
+                    mAdapter.notifyDataSetChanged();
+                }
+
+            }
+        });
     }
 
     @Override
     protected void loadData() {
-//        vm.getArticleList(mCurPage);
-//        vm.getBannerList();
+        mVm.getArticleList(mCurPage);
     }
 
     @Override
@@ -117,27 +145,26 @@ public class MainFragment extends BaseFragment<IPage.IPageParam> {
         if (mAdapter == null) {
             mAdapter = new ArticleAdapter(mData);
         }
-//        dataBinding.rv.setLayoutManager(new LinearLayoutManager(mContext));
-//        dataBinding.rv.setItemAnimator(new DefaultItemAnimator());
-//        dataBinding.rv.setAdapter(mAdapter);
-//        dataBinding.rv.setNestedScrollingEnabled(true);
-//        //        dataBinding.scroll.setNestedScrollingEnabled(true);
-//
-//        dataBinding.refresh.setRefreshHeader(new ClassicsHeader(mContext));
-//        dataBinding.refresh.setRefreshFooter(new ClassicsFooter(mContext));
-//
-//        dataBinding.refresh.setOnLoadMoreListener(refreshLayout -> {
-//            isRefresh=true;
-//            mCurPage++;
-//            vm.getArticleList(mCurPage);
-//            dataBinding.refresh.setEnableLoadMore(false);
-//        });
-//        dataBinding.refresh.setOnRefreshListener(refreshLayout -> {
-//            isRefresh=true;
-//            mCurPage = 0;
-//            vm.getArticleList(mCurPage);
-//        });
 
+        mBinding.rv.setLayoutManager(new LinearLayoutManager(mContext));
+        mBinding.rv.setItemAnimator(new DefaultItemAnimator());
+        mBinding.rv.setAdapter(mAdapter);
+
+        mBinding.refresh.setRefreshHeader(new ClassicsHeader(mContext));
+        mBinding.refresh.setRefreshFooter(new ClassicsFooter(mContext));
+
+        mBinding.refresh.setOnRefreshListener(refreshLayout -> {
+            mLoadingType = LoadingType.LOADING_REFRESH;
+            mCurPage = 0;
+            mVm.getArticleList(mCurPage);
+        });
+
+        mBinding.refresh.setOnLoadMoreListener(refreshLayout -> {
+            mLoadingType = LoadingType.LOADING_MORE;
+            mCurPage++;
+            mVm.getArticleList(mCurPage);
+            mBinding.refresh.setEnableLoadMore(false);
+        });
 
     }
 

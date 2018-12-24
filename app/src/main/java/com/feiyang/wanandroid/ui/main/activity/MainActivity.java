@@ -20,6 +20,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentStatePagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
 
 public class MainActivity extends BaseActivity<MainActivity.Param, ActivityMainBinding, MainViewModel> {
@@ -58,6 +59,36 @@ public class MainActivity extends BaseActivity<MainActivity.Param, ActivityMainB
             @Override
             public int getCount() {
                 return fragments.length;
+            }
+        });
+
+        databinding.vp.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                switch (position) {
+                    case 0:
+                        databinding.bottomNavigationView.setSelectedItemId(R.id.tab_main_pager);
+                        break;
+                    case 1:
+                        databinding.bottomNavigationView.setSelectedItemId(R.id.tab_knowledge_hierarchy);
+                        break;
+                    case 2:
+                        databinding.bottomNavigationView.setSelectedItemId(R.id.tab_navigation);
+                        break;
+                    case 3:
+                        databinding.bottomNavigationView.setSelectedItemId(R.id.tab_project);
+                        break;
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
             }
         });
 
