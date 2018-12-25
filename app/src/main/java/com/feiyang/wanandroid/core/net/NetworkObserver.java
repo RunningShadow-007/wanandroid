@@ -27,11 +27,11 @@ import io.reactivex.functions.Function;
 public class NetworkObserver {
     private static final String TAG = NetworkObserver.class.getSimpleName();
 
-    private static final int ERROR = -1;
+    private static final int ERROR = -1;//失败
 
-    private static final int ERROR_TOKEN = -1001;
+    private static final int ERROR_TOKEN = -1001;//登录失效
 
-    private static final int SUCCESS = 0;
+    private static final int SUCCESS = 0;//成功
 
     @IntDef({ERROR, ERROR_TOKEN, SUCCESS})
     @Retention(RetentionPolicy.SOURCE)

@@ -24,7 +24,6 @@ import androidx.viewpager.widget.ViewPager;
 
 
 public class MainActivity extends BaseActivity<MainActivity.Param, ActivityMainBinding, MainViewModel> {
-    private int lastTabIndex = 0;
 
     private Fragment[] fragments;
 

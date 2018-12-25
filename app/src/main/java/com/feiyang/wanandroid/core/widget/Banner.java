@@ -61,11 +61,11 @@ public class Banner extends ViewPager {
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
             Log.e("Banner", "onPageScrolled: " + position);
             if (mSelectedIndex != position) {
-                mSelectedIndex = position;
                 if (onPageChangedCallback != null) {
                     onPageChangedCallback.onPageChanged(String.format("%s/%s", (mSelectedIndex % mData.size()) + 1, mData.size()), getItem().getTitle());
                 }
             }
+            mSelectedIndex = position;
         }
 
         @Override
