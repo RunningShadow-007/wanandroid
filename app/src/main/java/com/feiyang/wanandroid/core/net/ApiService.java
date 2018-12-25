@@ -172,5 +172,119 @@ public interface ApiService {
     @GET("lg/collect/list/{pageNo}/json")
     Observable<BaseResponse<CollectionData>> getCollectionList(@Path("pageNo") int pageNo);
 
+    /**
+     * 收藏站内文章
+     *
+     * @param id 文章id
+     * @return
+     */
+    @POST("lg/collect/{id}/json")
+    Observable<BaseResponse<Object>> collectInnerArticle(@Path("id") long id);
+
+    /**
+     * 收藏站外文章
+     *
+     * @param param
+     * @return
+     */
+    @POST("lg/collect/add/json")
+    Observable<BaseResponse<Object>> collectOuterArticle(@Body CollectOuterParam param);
+
+    class CollectOuterParam {
+        public String title, author, link;
+
+        public CollectOuterParam(String title, String author, String link) {
+            this.title = title;
+            this.author = author;
+            this.link = link;
+        }
+
+        public CollectOuterParam() {
+        }
+    }
+
+    /**
+     * 取消收藏(文章列表)
+     *
+     * @param id 文章
+     * @return
+     */
+    @POST("lg/uncollect_originId/{id}/json")
+    Observable<BaseResponse<Object>> uncollect(@Path("id") long id);
+
+    /**
+     * 取消收藏(我的收藏页面（该页面包含自己录入的内容）)
+     *
+     * @param id
+     * @param param{originId 列表页下发，无则为-1}
+     * @return
+     */
+    @POST("lg/uncollect_originId/{id}/json")
+    Observable<BaseResponse<Object>> uncollect(@Path("id") long id, @Body UncollectParam param);
+
+    class UncollectParam {
+        public long originId = -1;
+
+        public UncollectParam(long originId) {
+            this.originId = originId;
+        }
+
+        public UncollectParam() {
+        }
+    }
+
+    /**
+     * 收藏网站列表
+     *
+     * @return
+     */
+    @POST("lg/collect/usertools/json")
+    Observable<BaseResponse<CollectionData>> getCollectionSite();
+
+    /**
+     * 收藏网址
+     *
+     * @return
+     */
+    @POST("lg/collect/addtool/json")
+    Observable<BaseResponse<Object>> collectSite(@Body CollectOuterParam param);
+
+    class CollectSiteParam {
+        public String name, link;
+
+        public CollectSiteParam(String name, String link) {
+            this.name = name;
+            this.link = link;
+        }
+
+        public CollectSiteParam() {
+        }
+    }
+
+    /**
+     * 删除收藏网站
+     *
+     * @return
+     */
+    @POST("lg/collect/deletetool/json")
+    Observable<BaseResponse<Object>> deleteCollectSite(@Body DeleteCollectSiteParam param);
+
+    class DeleteCollectSiteParam {
+        public long id;
+    }
+
+    /**
+     * 搜索
+     * @param pageNo
+     * @param param
+     * @return
+     */
+    @POST("article/query/{pageNo}/json")
+    Observable<BaseResponse<ArticlesData>> queryByWords(@Path("pageNo") int pageNo, @Body QueryParam param);
+
+    class QueryParam {
+        public String k;
+    }
+
 
 }
