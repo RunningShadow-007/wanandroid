@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.Parcelable;
 import android.os.Process;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -32,7 +33,7 @@ import static com.feiyang.wanandroid.core.util.ViewModelUtils.obtainViewModel;
  * Desc: <br>
  */
 @SuppressLint("Registered")
-public abstract class BaseActivity<Param extends IPage.IPageParam, D extends ViewDataBinding, VM extends BaseViewModel> extends AppCompatActivity implements IPage {
+public abstract class BaseActivity<Param extends Parcelable, D extends ViewDataBinding, VM extends BaseViewModel> extends AppCompatActivity implements IPage {
     private static final long TOAST_INTERNAL = 2000;
 
     protected CompositeDisposable mDisposable;
@@ -73,22 +74,21 @@ public abstract class BaseActivity<Param extends IPage.IPageParam, D extends Vie
         }
 
         initViews();
-        observeData();
 
     }
 
     private void initArgs(@Nullable Bundle savedInstanceState) {
         if (savedInstanceState != null) {
-            mParam = (Param) savedInstanceState.getSerializable(IPage.PAGE_PARAM);
+            mParam =  savedInstanceState.getParcelable(IPage.PAGE_PARAM);
         } else {
-            mParam = (Param) getIntent().getSerializableExtra(IPage.PAGE_PARAM);
+            mParam =  getIntent().getParcelableExtra(IPage.PAGE_PARAM);
         }
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putSerializable(IPage.PAGE_PARAM, mParam);
+        outState.putParcelable(IPage.PAGE_PARAM, mParam);
     }
 
     protected boolean add(Disposable... disposable) {
@@ -138,11 +138,11 @@ public abstract class BaseActivity<Param extends IPage.IPageParam, D extends Vie
         post(() -> {
             if (isValidContext(this)) {
                 if (mLoadingDialog == null) {
-                    mLoadingDialog = new AlertDialog.Builder(this,R.style.common_dialog_style).create();
+                    mLoadingDialog = new AlertDialog.Builder(this, R.style.common_dialog_style).create();
                     mLoadingDialog.setCanceledOnTouchOutside(true);
                 }
-                LottieAnimationView    loadingView  = new LottieAnimationView(this);
-                ViewGroup.LayoutParams params=new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                LottieAnimationView    loadingView = new LottieAnimationView(this);
+                ViewGroup.LayoutParams params      = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 loadingView.setLayoutParams(params);
                 loadingView.setAnimation(R.raw.loader);
                 loadingView.setRepeatCount(LottieDrawable.INFINITE);
@@ -180,8 +180,21 @@ public abstract class BaseActivity<Param extends IPage.IPageParam, D extends Vie
 
     }
 
-    protected void loadData(){}
+    /**
+     * 知识定义好了加载数据的方法名称,
+     * 并没有在onCreate中调用需要主动调用,
+     * 需要主动调用
+     * 这样既规范,又灵活
+     */
+    protected void loadData() {
+    }
 
+    /**
+     * 知识定义好了加载数据的方法名称,
+     * 并没有在onCreate中调用需要主动调用,
+     * 需要主动调用
+     * 这样既规范,又灵活
+     */
     protected void observeData() {
 
     }
@@ -215,7 +228,6 @@ public abstract class BaseActivity<Param extends IPage.IPageParam, D extends Vie
         pageName.pageParam = null;
         startActivityForResult(intent, requestCode);
     }
-
 
 
 }

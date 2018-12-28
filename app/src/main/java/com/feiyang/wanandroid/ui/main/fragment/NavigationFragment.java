@@ -19,10 +19,7 @@ public class NavigationFragment extends BaseFragment {
         fragment.setArguments(args);
         return fragment;
     }
-    @Override
-    protected int layoutId() {
-        return 0;
-    }
+
 
 
 }

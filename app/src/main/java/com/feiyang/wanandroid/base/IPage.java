@@ -1,9 +1,10 @@
 package com.feiyang.wanandroid.base;
 
+import android.os.Parcelable;
+
+import com.feiyang.wanandroid.ui.knowledge.activity.KnowledgeActivity;
 import com.feiyang.wanandroid.ui.login.activity.LoginActivity;
 import com.feiyang.wanandroid.ui.main.activity.MainActivity;
-
-import java.io.Serializable;
 
 /**
  * Copyright:wanandroid2
@@ -21,19 +22,17 @@ public interface IPage {
     enum PageName {
         MAIN(MainActivity.class),
         LOGIN(LoginActivity.class),
+        KNOWLEDGE(KnowledgeActivity.class),
         ;
 
         public Class target;
 
-        public IPageParam pageParam;
-
+        public Parcelable pageParam;
 
         PageName(Class target) {
             this.target = target;
         }
     }
 
-    class IPageParam implements Serializable {
 
-    }
 }

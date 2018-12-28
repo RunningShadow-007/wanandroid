@@ -6,7 +6,7 @@ import android.os.Looper;
 import android.util.AttributeSet;
 import android.util.Log;
 
-import com.feiyang.wanandroid.ui.main.adpter.BannerAdapter;
+import com.feiyang.wanandroid.ui.main.adapter.BannerAdapter;
 import com.feiyang.wanandroid.ui.main.model.bean.BannerData;
 
 import java.util.ArrayList;

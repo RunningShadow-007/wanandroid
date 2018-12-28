@@ -19,9 +19,6 @@ public class ProjectFragment extends BaseFragment {
         fragment.setArguments(args);
         return fragment;
     }
-    @Override
-    protected int layoutId() {
-        return 0;
-    }
+
 
 }

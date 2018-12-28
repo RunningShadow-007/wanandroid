@@ -1,4 +1,4 @@
-package com.feiyang.wanandroid.ui.main.adpter;
+package com.feiyang.wanandroid.ui.main.adapter;
 
 import android.view.View;
 import android.view.ViewGroup;

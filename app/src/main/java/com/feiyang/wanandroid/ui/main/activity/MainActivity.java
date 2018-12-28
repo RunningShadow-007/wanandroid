@@ -1,12 +1,12 @@
 package com.feiyang.wanandroid.ui.main.activity;
 
+import android.os.Parcelable;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
 import com.feiyang.wanandroid.R;
 import com.feiyang.wanandroid.base.BaseActivity;
-import com.feiyang.wanandroid.base.IPage;
 import com.feiyang.wanandroid.core.util.StatusBarUtils;
 import com.feiyang.wanandroid.databinding.ActivityMainBinding;
 import com.feiyang.wanandroid.ui.main.fragment.KnowledgeHierarchyFragment;
@@ -27,11 +27,12 @@ public class MainActivity extends BaseActivity<MainActivity.Param, ActivityMainB
 
     private Fragment[] fragments;
 
+
     @Override
     protected void initViews() {
         super.initViews();
         setUpFragments();
-
+        observeData();
     }
 
     private void setUpFragments() {
@@ -201,7 +202,8 @@ public class MainActivity extends BaseActivity<MainActivity.Param, ActivityMainB
     }
 
 
-    static class Param extends IPage.IPageParam {
+
+    abstract class Param implements Parcelable {
 
     }
 

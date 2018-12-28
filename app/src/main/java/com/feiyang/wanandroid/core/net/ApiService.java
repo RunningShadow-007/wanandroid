@@ -68,7 +68,7 @@ public interface ApiService {
      * @return
      */
     @GET("tree/json")
-    Observable<BaseResponse<List<KnowledgeHierarchyData>>> getKnowledgeHirarchyList();
+    Observable<BaseResponse<List<KnowledgeHierarchyData>>> getKnowledgeHierarchyList();
 
     /**
      * 知识体系下的文章

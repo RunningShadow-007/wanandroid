@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.Parcelable;
 import android.os.Process;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -28,7 +29,7 @@ import io.reactivex.disposables.Disposable;
  * Date:2018/11/22 1:27 PM<br>
  * Desc: <br>
  */
-public abstract class BaseFragment<Param extends IPage.IPageParam> extends Fragment implements IPage {
+public abstract class BaseFragment<Param extends Parcelable> extends Fragment implements IPage {
 
     protected Context mContext;
 
@@ -58,10 +59,10 @@ public abstract class BaseFragment<Param extends IPage.IPageParam> extends Fragm
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (savedInstanceState != null) {
-            param = (Param) savedInstanceState.getSerializable(IPage.PAGE_PARAM);
+            param =  savedInstanceState.getParcelable(IPage.PAGE_PARAM);
         } else {
             if (getArguments() != null) {
-                param = (Param) getArguments().getSerializable(IPage.PAGE_PARAM);
+                param =  getArguments().getParcelable(IPage.PAGE_PARAM);
             }
         }
         handler = new Handler(Looper.getMainLooper());
@@ -161,13 +162,11 @@ public abstract class BaseFragment<Param extends IPage.IPageParam> extends Fragm
         return !(a.isDestroyed() || a.isFinishing());
     }
 
-    protected abstract int layoutId();
-
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putSerializable(IPage.PAGE_PARAM, param);
+        outState.putParcelable(IPage.PAGE_PARAM, param);
     }
 
     @Override

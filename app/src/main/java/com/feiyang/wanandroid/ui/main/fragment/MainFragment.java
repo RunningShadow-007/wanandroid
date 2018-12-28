@@ -5,14 +5,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.feiyang.wanandroid.R;
 import com.feiyang.wanandroid.base.BaseFragment;
 import com.feiyang.wanandroid.base.BaseItem;
-import com.feiyang.wanandroid.base.IPage;
 import com.feiyang.wanandroid.core.constants.LoadingType;
 import com.feiyang.wanandroid.core.util.ViewModelUtils;
 import com.feiyang.wanandroid.databinding.FragmentMainBinding;
-import com.feiyang.wanandroid.ui.main.adpter.ArticleAdapter;
+import com.feiyang.wanandroid.ui.main.adapter.ArticleAdapter;
 import com.feiyang.wanandroid.ui.main.model.bean.HeaderData;
 import com.feiyang.wanandroid.ui.main.vm.MainViewModel;
 import com.scwang.smartrefresh.layout.footer.ClassicsFooter;
@@ -32,7 +30,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
  * Date:2018/12/13 1:48 PM<br>
  * Desc:主页 <br>
  */
-public class MainFragment extends BaseFragment<IPage.IPageParam> {
+public class MainFragment extends BaseFragment {
 
     private int mCurPage = 0;
 
@@ -46,7 +44,7 @@ public class MainFragment extends BaseFragment<IPage.IPageParam> {
 
     private LoadingType mLoadingType = LoadingType.LOADING_ORIGIN;
 
-    private BaseItem mHeaderData=null;
+    private BaseItem mHeaderData = null;
 
     public static MainFragment newInstance() {
         MainFragment fragment = new MainFragment();
@@ -67,11 +65,6 @@ public class MainFragment extends BaseFragment<IPage.IPageParam> {
         observeData();
         loadData();
         return mBinding.getRoot();
-    }
-
-    @Override
-    protected int layoutId() {
-        return R.layout.fragment_main;
     }
 
 
@@ -109,8 +102,8 @@ public class MainFragment extends BaseFragment<IPage.IPageParam> {
         });
 
         mVm.bannerList.observe(this, bannerData -> {
-            mHeaderData= new HeaderData(bannerData);
-            mData.add(0,mHeaderData);
+            mHeaderData = new HeaderData(bannerData);
+            mData.add(0, mHeaderData);
             mAdapter.notifyItemInserted(0);
         });
 
@@ -122,9 +115,9 @@ public class MainFragment extends BaseFragment<IPage.IPageParam> {
                     mAdapter.notifyItemRangeInserted(oldSize, articleBeans.size());
                 } else {
                     mData.clear();
-                    if (mHeaderData!=null){
-                        mData.add(0,mHeaderData);
-                    }else {
+                    if (mHeaderData != null) {
+                        mData.add(0, mHeaderData);
+                    } else {
                         mVm.getBannerList();
                     }
                     mData.addAll(articleBeans);
@@ -168,5 +161,9 @@ public class MainFragment extends BaseFragment<IPage.IPageParam> {
 
     }
 
-
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mVm.dispose();
+    }
 }

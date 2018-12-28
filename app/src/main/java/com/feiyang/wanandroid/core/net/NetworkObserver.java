@@ -5,7 +5,6 @@ import android.util.Log;
 
 import com.feiyang.wanandroid.App;
 import com.feiyang.wanandroid.base.BaseResponse;
-import com.feiyang.wanandroid.base.ScheduleTransformer;
 import com.feiyang.wanandroid.core.util.UiUtils;
 
 import java.lang.annotation.Retention;
@@ -15,6 +14,7 @@ import androidx.annotation.IntDef;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
 
 
 /**
@@ -40,7 +40,7 @@ public class NetworkObserver {
     }
 
     public static <T> Observable<T> on(Observable<BaseResponse<T>> observable) {
-        return observable.compose(new ScheduleTransformer<>())
+        return observable.subscribeOn(Schedulers.io())
                          .flatMap(new ResponseErrorFunction<>());
     }
 

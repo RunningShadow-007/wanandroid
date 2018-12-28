@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <!--相关体系名称-->
+        <TextView
+            android:id="@+id/tvHierarchyName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/textColor222"
+            android:textSize="@dimen/sp_18"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="四大组件" />
+
+        <TextView
+            android:id="@+id/tvHierarchyItems"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="30dp"
+            app:layout_constrainedWidth="true"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/textColor666"
+            app:layout_constraintEnd_toStartOf="@id/ivArrow"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintStart_toStartOf="parent"
+            android:lineSpacingExtra="5dp"
+            app:layout_constraintTop_toBottomOf="@id/tvHierarchyName"
+            tools:text="Activity  deep_link  基础概念  adb  字符编码  线程池  Span  多线程与并发  Apk诞生记  序列化" />
+
+        <ImageView
+            android:id="@+id/ivArrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_chevron_right_black_24dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="20dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tvHierarchyItems" />
+
+        <View
+            android:id="@+id/line"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="10dp"
+            app:layout_constraintTop_toBottomOf="@id/tvHierarchyItems"
+            android:background="@color/grey_divider"
+            android:layout_width="0dp"
+            android:layout_height="1dp" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
