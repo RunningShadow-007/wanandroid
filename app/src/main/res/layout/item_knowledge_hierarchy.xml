@@ -9,8 +9,14 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
+        android:background="@color/white"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="10dp"
+        android:elevation="3dp"
+        android:orientation="vertical"
+        >
         <!--相关体系名称-->
         <TextView
             android:id="@+id/tvHierarchyName"

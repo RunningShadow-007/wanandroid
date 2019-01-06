@@ -7,6 +7,7 @@ import com.feiyang.wanandroid.ui.main.model.bean.ArticlesData;
 import com.feiyang.wanandroid.ui.main.model.bean.BannerData;
 import com.feiyang.wanandroid.ui.main.model.bean.HotWordsData;
 import com.feiyang.wanandroid.ui.main.model.bean.KnowledgeHierarchyData;
+import com.feiyang.wanandroid.ui.main.model.bean.NaviData;
 import com.feiyang.wanandroid.ui.main.model.bean.SiteData;
 
 import java.util.List;
@@ -93,4 +94,15 @@ public class MainRepository {
     public Observable<List<HotWordsData>> getHotWordsList() {
         return NetworkObserver.on(mRemote.getHotWordsList());
     }
+
+    /**
+     * 导航数据
+     *
+     * @return
+     */
+    public Observable<List<NaviData>> getNaviList() {
+        return NetworkObserver.on(mRemote.getNaviList());
+    }
+
+
 }

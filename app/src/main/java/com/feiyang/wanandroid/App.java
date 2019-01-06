@@ -3,11 +3,14 @@ package com.feiyang.wanandroid;
 import android.app.Application;
 import android.content.Intent;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.bumptech.glide.Glide;
 import com.facebook.stetho.Stetho;
-import com.feiyang.wanandroid.ui.login.activity.LoginActivity;
 import com.feiyang.wanandroid.core.util.SpUtils;
+import com.feiyang.wanandroid.ui.login.activity.LoginActivity;
+
+import io.reactivex.plugins.RxJavaPlugins;
 
 /**
  * Copyright:wanandroid2
@@ -16,7 +19,9 @@ import com.feiyang.wanandroid.core.util.SpUtils;
  * Desc: <br>
  */
 public class App extends Application {
-    private static App mInstance;
+    private static final String TAG = App.class.getSimpleName();
+
+    private static       App    mInstance;
 
     private static volatile boolean isFirstLaunch = true;
 
@@ -31,6 +36,7 @@ public class App extends Application {
         if (BuildConfig.DEBUG) {
             Stetho.initializeWithDefaults(this);
         }
+        RxJavaPlugins.setErrorHandler(throwable -> Log.e(TAG, "onCreate: ", throwable));
     }
 
     @Override

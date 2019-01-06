@@ -4,10 +4,12 @@ import android.app.Application;
 import android.util.Log;
 
 import com.feiyang.wanandroid.base.BaseViewModel;
+import com.feiyang.wanandroid.core.util.ObjectUtils;
 import com.feiyang.wanandroid.ui.main.model.MainRepository;
 import com.feiyang.wanandroid.ui.main.model.bean.ArticlesData;
 import com.feiyang.wanandroid.ui.main.model.bean.BannerData;
 import com.feiyang.wanandroid.ui.main.model.bean.KnowledgeHierarchyData;
+import com.feiyang.wanandroid.ui.main.model.bean.NaviData;
 
 import java.util.List;
 
@@ -21,6 +23,7 @@ import io.reactivex.disposables.Disposable;
  * Date:2018/12/13 10:50 AM<br>
  * Desc: <br>
  */
+@SuppressWarnings("JavaDoc")
 public class MainViewModel extends BaseViewModel {
     public static final String TAG = MainViewModel.class.getSimpleName();
 
@@ -37,6 +40,8 @@ public class MainViewModel extends BaseViewModel {
     public MutableLiveData<List<KnowledgeHierarchyData>> hierarchyList = new MutableLiveData<>();//知识体系列表
 
     public MutableLiveData<List<ArticlesData.ArticleBean>> hierarchyArticleList = new MutableLiveData<>();//知识体系下文章列表
+
+    public MutableLiveData<List<NaviData>> navList = new MutableLiveData<>();//全部导航数据
 
     public MainViewModel(@NonNull Application application) {
         super(application);
@@ -91,9 +96,37 @@ public class MainViewModel extends BaseViewModel {
         Disposable subscribe = mRepository.getKnowledgeArticleList(pageNo, cid)
                                           .doOnSubscribe(disposable -> loading.postValue(true))
                                           .doOnTerminate(() -> loading.postValue(false))
-                                          .subscribe(articlesData-> {
-                                                  hierarchyArticleList.postValue(articlesData.getDatas());
+                                          .subscribe(articlesData -> {
+                                              hierarchyArticleList.postValue(articlesData.getDatas());
                                           }, throwable -> Log.e(TAG, "getKnowledgeArticleList: ", throwable));
         disposable.add(subscribe);
     }
+
+    /**
+     * 导航数据
+     *
+     * @return
+     */
+    public void getNaviList() {
+        Disposable subscribe = mRepository.getNaviList()
+                                          .doOnSubscribe(disposable -> loading.postValue(true))
+                                          .doOnTerminate(() -> loading.postValue(false))
+                                          .subscribe(naviData -> {
+                                              if (ObjectUtils.isNonNull(naviData)) {
+                                                  navList.postValue(naviData);
+                                              }
+                                          }, throwable -> Log.e(TAG, "getNaviList: ", throwable));
+        disposable.add(subscribe);
+    }
+
+    public void clearSelected(List<NaviData> list) {
+        for (NaviData data : list) {
+            if (data.isSelected) {
+                data.isSelected = false;
+                break;
+            }
+        }
+    }
+
+
 }

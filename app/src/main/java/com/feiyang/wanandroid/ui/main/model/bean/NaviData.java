@@ -23,6 +23,8 @@ public class NaviData implements Parcelable {
 
     private String name;
 
+    public boolean isSelected = false;
+
     private List<ArticlesData.ArticleBean> articles;
 
     protected NaviData(Parcel in) {
