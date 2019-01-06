@@ -137,15 +137,28 @@ public class NavigationFragment extends BaseFragment {
         mBinding.rvRight.setLayoutManager(rightManager);
         mBinding.rvRight.setAdapter(mNavListAdapter);
 
+
         mBinding.rvRight.addOnScrollListener(new RecyclerView.OnScrollListener() {
 
             @Override
-            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                if (recyclerView.getScrollState()== RecyclerView.SCROLL_STATE_IDLE) {
-//                    recyclerView.getChildVisibleRect()
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+
+                LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                if (layoutManager != null) {
+                    int firstVisibleItemPosition = layoutManager.findFirstCompletelyVisibleItemPosition();
+                    if (firstVisibleItemPosition>=0&&newState==RecyclerView.SCROLL_STATE_IDLE){
+                        mBinding.rvLeft.smoothScrollToPosition(firstVisibleItemPosition);
+                        mVm.clearSelected(mData);
+                        mData.get(firstVisibleItemPosition).isSelected=true;
+                        mTitleAdapter.notifyDataSetChanged();
+                        mBinding.rvRight.smoothScrollToPosition(firstVisibleItemPosition);
+                    }
+
                 }
             }
         });
+
+
     }
 }
