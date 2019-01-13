@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="ContentDescription">
+
+    <data>
+
+        <variable
+            name="item"
+            type="com.feiyang.wanandroid.ui.main.model.bean.ArticlesData.ArticleBean" />
+
+        <import type="android.text.TextUtils" />
+
+        <import type="android.view.View" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="170dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="5dp"
+        android:background="@color/white"
+        android:elevation="5dp"
+        tools:targetApi="lollipop">
+
+        <ImageView
+            android:id="@+id/ivPic"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:visibility="@{TextUtils.isEmpty(item.envelopePic)?View.GONE:View.VISIBLE}"
+            app:imageUrl="@{item.envelopePic}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="9:16"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@color/grey" />
+
+        <ImageView
+            android:id="@+id/ivAvatar"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="2dp"
+            android:src="@mipmap/ic_launcher"
+            app:layout_constraintStart_toEndOf="@id/ivPic"
+            app:layout_constraintTop_toTopOf="@id/ivPic"
+            tools:src="@mipmap/ic_launcher" />
+
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:text="@{item.title}"
+            android:textColor="@color/textColor222"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/ivAvatar"
+            app:layout_constraintTop_toTopOf="@id/ivAvatar"
+            tools:text="阿斯顿发打发斯蒂芬阿斯顿发大水发顺丰阿斯顿法师打发阿斯顿法师打发阿斯顿法师打发" />
+
+        <TextView
+            android:id="@+id/tvDesc"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:ellipsize="end"
+            android:maxLines="4"
+            android:text="@{item.desc}"
+            android:textColor="@color/textColor333"
+            app:layout_constraintEnd_toEndOf="@id/tvTitle"
+            app:layout_constraintStart_toStartOf="@id/ivAvatar"
+            app:layout_constraintTop_toBottomOf="@id/tvTitle"
+            tools:text="阿斯顿发打发斯蒂芬阿斯顿发大水发顺丰阿斯顿法师打发阿斯顿法师打发阿斯顿法师打发阿斯顿发打发斯蒂芬阿斯顿发大水发顺丰阿斯顿法师打发阿斯顿法师asdfasdfadsfsadf打发阿斯顿法师打发" />
+
+        <TextView
+            android:id="@+id/tvDateAndAuthor"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:maxLines="1"
+            android:text='@{item.niceDate+"     "+item.author}'
+            app:layout_constraintEnd_toEndOf="@id/tvTitle"
+            app:layout_constraintStart_toStartOf="@id/ivAvatar"
+            app:layout_constraintTop_toBottomOf="@id/tvDesc"
+            tools:text="2019-01-11    李阳" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -100,25 +100,6 @@ public class NavigationFragment extends BaseFragment {
         if (mData == null) {
             mData = new ArrayList<>();
         }
-        if (mNavListAdapter == null) {
-            mNavListAdapter = new NavListAdapter(mData);
-            mNavListAdapter.setOnTagClickListener(new OnItemClickListener<ArticlesData.ArticleBean>() {
-                @Override
-                public void onItemClick(View view, ArticlesData.ArticleBean data, int pos) {
-
-                }
-            });
-        }
-
-        if (mTitleAdapter == null) {
-            mTitleAdapter = new NavTitleAdapter(mData);
-            mTitleAdapter.setOnItemClickListener((view, data, pos) -> {
-                mVm.clearSelected(mData);
-                data.isSelected = true;
-                mTitleAdapter.notifyDataSetChanged();
-                mBinding.rvRight.smoothScrollToPosition(pos);
-            });
-        }
 
         LinearLayoutManager leftManager = new LinearLayoutManager(mContext);
         LinearLayoutManager rightManager = new LinearLayoutManager(mContext) {
@@ -130,6 +111,28 @@ public class NavigationFragment extends BaseFragment {
                 startSmoothScroll(smoothScroller);
             }
         };
+
+        if (mNavListAdapter == null) {
+            mNavListAdapter = new NavListAdapter(mData);
+            mNavListAdapter.setOnTagClickListener(new OnItemClickListener<ArticlesData.ArticleBean>() {
+                @Override
+                public void onItemClick(View view, ArticlesData.ArticleBean data, int pos) {
+
+                }
+            });
+        }
+
+
+        if (mTitleAdapter == null) {
+            mTitleAdapter = new NavTitleAdapter(mData);
+            mTitleAdapter.setOnItemClickListener((view, data, pos) -> {
+                mVm.clearSelected(mData);
+                data.isSelected = true;
+                mTitleAdapter.notifyDataSetChanged();
+                mBinding.rvRight.smoothScrollToPosition(pos);
+            });
+        }
+
 
         mBinding.rvLeft.setAdapter(mTitleAdapter);
         mBinding.rvLeft.setLayoutManager(leftManager);
@@ -145,16 +148,16 @@ public class NavigationFragment extends BaseFragment {
                 super.onScrollStateChanged(recyclerView, newState);
 
                 LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+
                 if (layoutManager != null) {
                     int firstVisibleItemPosition = layoutManager.findFirstCompletelyVisibleItemPosition();
-                    if (firstVisibleItemPosition>=0&&newState==RecyclerView.SCROLL_STATE_IDLE){
+                    if (firstVisibleItemPosition >= 0 && newState == RecyclerView.SCROLL_STATE_IDLE) {
                         mBinding.rvLeft.smoothScrollToPosition(firstVisibleItemPosition);
                         mVm.clearSelected(mData);
-                        mData.get(firstVisibleItemPosition).isSelected=true;
+                        mData.get(firstVisibleItemPosition).isSelected = true;
                         mTitleAdapter.notifyDataSetChanged();
                         mBinding.rvRight.smoothScrollToPosition(firstVisibleItemPosition);
                     }
-
                 }
             }
         });

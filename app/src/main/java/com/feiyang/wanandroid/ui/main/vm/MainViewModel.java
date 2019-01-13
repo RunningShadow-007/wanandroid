@@ -10,6 +10,7 @@ import com.feiyang.wanandroid.ui.main.model.bean.ArticlesData;
 import com.feiyang.wanandroid.ui.main.model.bean.BannerData;
 import com.feiyang.wanandroid.ui.main.model.bean.KnowledgeHierarchyData;
 import com.feiyang.wanandroid.ui.main.model.bean.NaviData;
+import com.feiyang.wanandroid.ui.main.model.bean.ProjectCategoryData;
 
 import java.util.List;
 
@@ -42,6 +43,10 @@ public class MainViewModel extends BaseViewModel {
     public MutableLiveData<List<ArticlesData.ArticleBean>> hierarchyArticleList = new MutableLiveData<>();//知识体系下文章列表
 
     public MutableLiveData<List<NaviData>> navList = new MutableLiveData<>();//全部导航数据
+
+    public MutableLiveData<List<ProjectCategoryData>> projectCateList = new MutableLiveData<>();//项目分类列表
+
+    public MutableLiveData<ArticlesData> projectArticles = new MutableLiveData<>();//项目文章列表
 
     public MainViewModel(@NonNull Application application) {
         super(application);
@@ -128,5 +133,24 @@ public class MainViewModel extends BaseViewModel {
         }
     }
 
+    public void getProjectCateList() {
+        Disposable subscribe = mRepository.getProjectCateList()
+                                          .doOnSubscribe(disposable -> loading.postValue(true))
+                                          .doOnTerminate(() -> loading.postValue(false))
+                                          .subscribe(data -> {
+                                              projectCateList.postValue(data);
+                                          }, throwable -> Log.e(TAG, "getProjectCateList", throwable));
+        disposable.add(subscribe);
+    }
+
+    public void getProjectArticles(int pageNo, int cid) {
+        Disposable subscribe = mRepository.getProjectArticles(pageNo, cid)
+                                          .doOnSubscribe(disposable -> loading.postValue(true))
+                                          .doOnTerminate(() -> loading.postValue(false))
+                                          .subscribe(data -> {
+                                              projectArticles.postValue(data);
+                                          }, throwable -> Log.e(TAG, "getProjectCateList", throwable));
+        disposable.add(subscribe);
+    }
 
 }

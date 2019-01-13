@@ -1,6 +1,7 @@
 package com.feiyang.wanandroid.ui.main.adapter;
 
 import android.content.Context;
+import android.os.Build;
 import android.view.Gravity;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -45,7 +46,9 @@ public class NavTagAdapter extends RecyclerView.Adapter<NavTagAdapter.ViewHolder
         int                               margin   = SizeUtils.dp2px(5);
         params.setMargins(margin, margin, margin, margin);
         textView.setLayoutParams(params);
-
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            textView.setElevation(3f);
+        }
         textView.setBackgroundColor(ContextCompat.getColor(parent.getContext(), R.color.colorBackground));
 
         int padding = SizeUtils.dp2px(5);

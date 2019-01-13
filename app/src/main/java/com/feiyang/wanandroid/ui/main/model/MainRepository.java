@@ -8,6 +8,7 @@ import com.feiyang.wanandroid.ui.main.model.bean.BannerData;
 import com.feiyang.wanandroid.ui.main.model.bean.HotWordsData;
 import com.feiyang.wanandroid.ui.main.model.bean.KnowledgeHierarchyData;
 import com.feiyang.wanandroid.ui.main.model.bean.NaviData;
+import com.feiyang.wanandroid.ui.main.model.bean.ProjectCategoryData;
 import com.feiyang.wanandroid.ui.main.model.bean.SiteData;
 
 import java.util.List;
@@ -104,5 +105,24 @@ public class MainRepository {
         return NetworkObserver.on(mRemote.getNaviList());
     }
 
+    /**
+     * 项目为包含一个分类，该接口返回整个分类。
+     *
+     * @return
+     */
+    public Observable<List<ProjectCategoryData>> getProjectCateList() {
+        return NetworkObserver.on(mRemote.getProjectCateList());
+    }
 
+    /**
+     * http://www.wanandroid.com/project/list/1/json?cid=294
+     * 某一个分类下项目列表数据，分页展示
+     *
+     * @param pageNo
+     * @param cid    cid 分类的id，上面项目分类接口
+     * @return
+     */
+    public Observable<ArticlesData> getProjectArticles(int pageNo, int cid) {
+        return NetworkObserver.on(mRemote.getProjectArticles(pageNo, cid));
+    }
 }

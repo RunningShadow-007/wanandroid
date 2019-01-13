@@ -412,7 +412,7 @@ public class ArticlesData implements Parcelable {
         }
 
         public String getTitle() {
-            return title;
+            return title==null?"":title;
         }
 
         public void setTitle(String title) {

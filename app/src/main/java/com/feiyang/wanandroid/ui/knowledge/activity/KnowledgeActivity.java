@@ -36,6 +36,12 @@ public class KnowledgeActivity extends BaseActivity<KnowledgeActivity.Param, Act
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+    }
+
     public static class Param implements Parcelable {
         public KnowledgeHierarchyData data;
 
