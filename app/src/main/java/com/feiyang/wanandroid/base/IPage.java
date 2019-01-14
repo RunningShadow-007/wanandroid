@@ -23,6 +23,7 @@ public interface IPage {
         MAIN(MainActivity.class),
         LOGIN(LoginActivity.class),
         KNOWLEDGE(KnowledgeActivity.class),
+        WEB(WebActivity.class),
         ;
 
         public Class target;

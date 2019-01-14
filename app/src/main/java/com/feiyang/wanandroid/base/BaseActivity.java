@@ -66,14 +66,11 @@ public abstract class BaseActivity<Param extends Parcelable, D extends ViewDataB
 
         if (layoutId() != 0) {
             databinding = DataBindingUtil.setContentView(this, layoutId());
-            initToolbar();
         }
 
         if (getVM() != null) {
             vm = obtainViewModel(this, getVM());
         }
-
-        initViews();
 
     }
 

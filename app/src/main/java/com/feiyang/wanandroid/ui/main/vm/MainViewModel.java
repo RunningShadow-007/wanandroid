@@ -40,7 +40,6 @@ public class MainViewModel extends BaseViewModel {
 
     public MutableLiveData<List<KnowledgeHierarchyData>> hierarchyList = new MutableLiveData<>();//知识体系列表
 
-    public MutableLiveData<List<ArticlesData.ArticleBean>> hierarchyArticleList = new MutableLiveData<>();//知识体系下文章列表
 
     public MutableLiveData<List<NaviData>> navList = new MutableLiveData<>();//全部导航数据
 
@@ -90,22 +89,7 @@ public class MainViewModel extends BaseViewModel {
         disposable.add(subscribe);
     }
 
-    /**
-     * 知识体系下的文章
-     *
-     * @param pageNo
-     * @param cid    分类的id，上述二级目录的id
-     * @return
-     */
-    public void getKnowledgeArticleList(int pageNo, int cid) {
-        Disposable subscribe = mRepository.getKnowledgeArticleList(pageNo, cid)
-                                          .doOnSubscribe(disposable -> loading.postValue(true))
-                                          .doOnTerminate(() -> loading.postValue(false))
-                                          .subscribe(articlesData -> {
-                                              hierarchyArticleList.postValue(articlesData.getDatas());
-                                          }, throwable -> Log.e(TAG, "getKnowledgeArticleList: ", throwable));
-        disposable.add(subscribe);
-    }
+
 
     /**
      * 导航数据

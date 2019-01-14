@@ -66,16 +66,7 @@ public class MainRepository {
         return NetworkObserver.on(mRemote.getKnowledgeHierarchyList());
     }
 
-    /**
-     * 知识体系下的文章
-     *
-     * @param pageNo
-     * @param cid    分类的id，上述二级目录的id
-     * @return
-     */
-    public Observable<ArticlesData> getKnowledgeArticleList(int pageNo, int cid) {
-        return NetworkObserver.on(mRemote.getKnowledgeArticleList(pageNo, cid));
-    }
+
 
     /**
      * 常用网站
@@ -125,4 +116,5 @@ public class MainRepository {
     public Observable<ArticlesData> getProjectArticles(int pageNo, int cid) {
         return NetworkObserver.on(mRemote.getProjectArticles(pageNo, cid));
     }
+
 }

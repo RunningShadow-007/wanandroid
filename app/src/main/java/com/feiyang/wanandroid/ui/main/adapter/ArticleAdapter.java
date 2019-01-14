@@ -6,6 +6,7 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.feiyang.wanandroid.base.BaseItem;
+import com.feiyang.wanandroid.core.callback.OnItemClickListener;
 import com.feiyang.wanandroid.core.widget.BannerBox;
 import com.feiyang.wanandroid.databinding.ItemArticlesBinding;
 import com.feiyang.wanandroid.ui.main.model.bean.ArticlesData;
@@ -28,6 +29,8 @@ import static com.feiyang.wanandroid.core.constants.Constants.TYPE_HEADER;
 public class ArticleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private List<? extends BaseItem> mData;
 
+    private OnItemClickListener onItemClickListener;
+
     public ArticleAdapter(@NonNull List<? extends BaseItem> data) {
         this.mData = data;
     }
@@ -38,6 +41,9 @@ public class ArticleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         return item.getItemType();
     }
 
+    public void setOnItemClickListener(OnItemClickListener<? extends BaseItem> onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
+    }
 
     @NonNull
     @Override
@@ -57,6 +63,10 @@ public class ArticleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         BaseItem item = getItem(position);
         if (holder instanceof ViewHolder) {
             ArticlesData.ArticleBean data = (ArticlesData.ArticleBean) item.getData();
+            ((ViewHolder) holder).binding.getRoot().setOnClickListener(v -> {
+                if (onItemClickListener != null)
+                    onItemClickListener.onItemClick(v, data, holder.getLayoutPosition());
+            });
             ((ViewHolder) holder).binding.setItem(data);
         } else if (holder instanceof HeadViewHolder) {
             HeaderData data = (HeaderData) item.getData();
@@ -100,4 +110,5 @@ public class ArticleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public static void loadImage(ImageView imageView, String url) {
         Glide.with(imageView).load(url).into(imageView);
     }
+
 }

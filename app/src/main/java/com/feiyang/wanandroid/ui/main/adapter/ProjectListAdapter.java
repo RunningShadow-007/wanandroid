@@ -3,6 +3,7 @@ package com.feiyang.wanandroid.ui.main.adapter;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
+import com.feiyang.wanandroid.core.callback.OnItemClickListener;
 import com.feiyang.wanandroid.databinding.ItemProjectListBinding;
 import com.feiyang.wanandroid.ui.main.model.bean.ArticlesData;
 
@@ -18,7 +19,9 @@ import androidx.recyclerview.widget.RecyclerView;
  * Desc: <br>
  */
 public class ProjectListAdapter extends RecyclerView.Adapter<ProjectListAdapter.ViewHolder> {
-    private List<ArticlesData.ArticleBean> mData;
+    private List<ArticlesData.ArticleBean>                mData;
+
+    private OnItemClickListener<ArticlesData.ArticleBean> onItemClickListener;
 
     public ProjectListAdapter(@NonNull List<ArticlesData.ArticleBean> mData) {
         this.mData = mData;
@@ -35,9 +38,14 @@ public class ProjectListAdapter extends RecyclerView.Adapter<ProjectListAdapter.
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         ArticlesData.ArticleBean item = getItem(position);
-        if (item==null)
+        if (item == null)
             return;
         holder.binding.setItem(item);
+        holder.binding.getRoot().setOnClickListener(v -> {
+                if (onItemClickListener!=null){
+                    onItemClickListener.onItemClick(v,item,holder.getLayoutPosition());
+                }
+        });
     }
 
     @Override
@@ -47,6 +55,11 @@ public class ProjectListAdapter extends RecyclerView.Adapter<ProjectListAdapter.
 
     public ArticlesData.ArticleBean getItem(int pos) {
         return mData.size() == 0 ? null : mData.get(pos);
+    }
+
+
+    public void setOnItemClickListener(OnItemClickListener<ArticlesData.ArticleBean> onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {

@@ -9,14 +9,16 @@
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+       >
 
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fitsSystemWindows="false"
             android:theme="@style/AppTheme.AppBarOverlay"
-            app:elevation="@dimen/dp_0">
+            app:elevation="@dimen/dp_0"
+          >
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
@@ -26,38 +28,26 @@
                 app:layout_scrollFlags="scroll|enterAlways"
                 app:navigationIcon="@drawable/ic_arrow_back_white_24dp">
 
-                <TextView
+                <com.feiyang.wanandroid.core.widget.MarqueeTextView
                     android:id="@+id/title"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:textColor="@color/white"
                     android:textSize="@dimen/sp_16"
-                    tools:text="主页" />
+                    tools:text="主页主页主页主页主页主页主页主页主页主页主页主页" />
             </androidx.appcompat.widget.Toolbar>
 
-            <com.google.android.material.tabs.TabLayout
-                android:id="@+id/tab"
-                app:tabIndicatorHeight="2dp"
-                app:tabMode="scrollable"
-                app:tabIndicatorColor="@color/white"
-                app:tabSelectedTextColor="@color/white"
-                app:tabTextColor="@color/while_most_color"
+            <ProgressBar
+                android:id="@+id/progress"
                 android:layout_width="match_parent"
-                android:layout_height="50dp" >
-                <com.google.android.material.tabs.TabItem
-                    android:layout_width="wrap_content"
-                    android:text="基础UI控件"
-                    android:layout_height="wrap_content" />
-                <com.google.android.material.tabs.TabItem
-                    android:layout_width="wrap_content"
-                    android:text="ListView GridView"
-                    android:layout_height="wrap_content" />
-            </com.google.android.material.tabs.TabLayout>
+                style="?android:attr/progressBarStyleHorizontal"
+                android:progressDrawable="@drawable/progress_bar_states"
+                android:layout_height="2dp" />
         </com.google.android.material.appbar.AppBarLayout>
 
-        <androidx.viewpager.widget.ViewPager
-            android:id="@+id/vp"
+        <WebView
+            android:id="@+id/webView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />

@@ -1,5 +1,6 @@
 package com.feiyang.wanandroid.ui.main.activity;
 
+import android.os.Bundle;
 import android.os.Parcelable;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,6 +16,7 @@ import com.feiyang.wanandroid.ui.main.fragment.NavigationFragment;
 import com.feiyang.wanandroid.ui.main.fragment.ProjectFragment;
 import com.feiyang.wanandroid.ui.main.vm.MainViewModel;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.core.content.ContextCompat;
@@ -27,6 +29,12 @@ public class MainActivity extends BaseActivity<MainActivity.Param, ActivityMainB
 
     private Fragment[] fragments;
 
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        initToolbar();
+        initViews();
+    }
 
     @Override
     protected void initViews() {

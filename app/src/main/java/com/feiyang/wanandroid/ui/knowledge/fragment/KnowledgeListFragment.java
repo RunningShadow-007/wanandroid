@@ -1,4 +1,4 @@
-package com.feiyang.wanandroid.ui.main.fragment;
+package com.feiyang.wanandroid.ui.knowledge.fragment;
 
 import android.os.Bundle;
 import android.os.Parcel;
@@ -11,10 +11,10 @@ import com.feiyang.wanandroid.base.BaseFragment;
 import com.feiyang.wanandroid.base.IPage;
 import com.feiyang.wanandroid.core.constants.LoadingType;
 import com.feiyang.wanandroid.core.util.ViewModelUtils;
-import com.feiyang.wanandroid.databinding.FragmentProjectListBinding;
-import com.feiyang.wanandroid.ui.main.adapter.ProjectListAdapter;
+import com.feiyang.wanandroid.databinding.FragmentKnowledgeListBinding;
+import com.feiyang.wanandroid.ui.knowledge.vm.KnowledgeViewModel;
+import com.feiyang.wanandroid.ui.main.adapter.ArticleAdapter;
 import com.feiyang.wanandroid.ui.main.model.bean.ArticlesData;
-import com.feiyang.wanandroid.ui.main.vm.MainViewModel;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
 
@@ -31,28 +31,27 @@ import static com.feiyang.wanandroid.core.util.ObjectUtils.isNonNull;
 /**
  * Copyright:wanandroid2
  * Author: liyang <br>
- * Date:2019/1/11 4:14 PM<br>
- * Desc: 存储项目列表<br>
+ * Date:2019/1/13 5:16 PM<br>
+ * Desc: <br>
  */
-public class ProjectListFragment extends BaseFragment<ProjectListFragment.Param> {
-    private int mCid, mCurPageNo = 1;
+public class KnowledgeListFragment extends BaseFragment<KnowledgeListFragment.Param> {
+    private KnowledgeViewModel mVm;
 
-    private FragmentProjectListBinding mBinding;
+    private FragmentKnowledgeListBinding mBinding;
 
-    private MainViewModel mVm;
-
-    private List<ArticlesData.ArticleBean> mData = new ArrayList<>();
-
-    private ProjectListAdapter mAdapter;
+    private int mCid, mCurPageNo = 0;
 
     private LoadingType mLoadingType = LoadingType.LOADING_ORIGIN;
 
-    public static ProjectListFragment newInstance(int cid) {
+    private List<ArticlesData.ArticleBean> mData = new ArrayList<>();
+
+    private ArticleAdapter mAdapter;
+
+    public static KnowledgeListFragment newInstance(int cid) {
         Bundle args  = new Bundle();
-        Param  param = new Param();
-        param.cid = cid;
+        Param  param = new Param(cid);
         args.putParcelable(IPage.PAGE_PARAM, param);
-        ProjectListFragment fragment = new ProjectListFragment();
+        KnowledgeListFragment fragment = new KnowledgeListFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -63,13 +62,13 @@ public class ProjectListFragment extends BaseFragment<ProjectListFragment.Param>
         if (param != null) {
             mCid = param.cid;
         }
-        mVm = ViewModelUtils.obtainViewModel(this, MainViewModel.class);
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        mBinding = FragmentProjectListBinding.inflate(inflater, container, false);
+        mVm = ViewModelUtils.obtainViewModel(this, KnowledgeViewModel.class);
+        mBinding = FragmentKnowledgeListBinding.inflate(inflater, container, false);
         initViews();
         observeData();
         loadData();
@@ -78,9 +77,8 @@ public class ProjectListFragment extends BaseFragment<ProjectListFragment.Param>
 
     @Override
     protected void observeData() {
-        super.observeData();
-        mVm.projectArticles.observe(this, data -> {
-            if (isNonNull(data)) {
+        mVm.hierarchyArticleList.observe(this, data -> {
+            if (isNonNull(data.getDatas())) {
                 mCurPageNo = data.getCurPage();
                 mBinding.swiper.setEnableLoadMore(mCurPageNo < data.getPageCount());
                 if (mLoadingType == LoadingType.LOADING_MORE) {
@@ -95,15 +93,6 @@ public class ProjectListFragment extends BaseFragment<ProjectListFragment.Param>
                         mAdapter.notifyDataSetChanged();
                     }
                 }
-            }
-        });
-        mVm.isLoadFailed.observe(this, aVoid -> {
-            mCurPageNo--;
-            if (mCurPageNo < 0) {
-                mCurPageNo = 0;
-            }
-            if (mLoadingType==LoadingType.LOADING_MORE){
-                mBinding.swiper.setEnableLoadMore(true);
             }
         });
 
@@ -128,64 +117,67 @@ public class ProjectListFragment extends BaseFragment<ProjectListFragment.Param>
                 }
             }
         });
+
+        mVm.isLoadFailed.observe(this, aVoid -> {
+            mCurPageNo--;
+            if (mCurPageNo < 0) {
+                mCurPageNo = 0;
+            }
+            if (mLoadingType == LoadingType.LOADING_MORE)
+                mBinding.swiper.setEnableLoadMore(true);
+        });
+
+
     }
 
     @Override
     protected void loadData() {
-        super.loadData();
-        mVm.getProjectArticles(mCurPageNo, mCid);
+        mVm.getKnowledgeArticleList(mCurPageNo, mCid);
     }
 
     @Override
     protected void initViews() {
-        super.initViews();
-        mLoadingType=LoadingType.LOADING_ORIGIN;
-        if (mAdapter == null) {
-            mAdapter = new ProjectListAdapter(mData);
-            mAdapter.setOnItemClickListener((view, data, pos) -> {
-                PageName                 pageName = PageName.WEB;
-                pageName.pageParam = data;
-                startPage(pageName);
-            });
-        }
-
-        mBinding.rv.setAdapter(mAdapter);
-        mBinding.rv.setLayoutManager(new LinearLayoutManager(mContext));
-        mBinding.rv.setItemAnimator(new DefaultItemAnimator());
-
         mBinding.swiper.setOnRefreshLoadMoreListener(new OnRefreshLoadMoreListener() {
             @Override
             public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
-                mLoadingType = LoadingType.LOADING_MORE;
                 mCurPageNo++;
-                mVm.getProjectArticles(mCurPageNo, mCid);
+                mLoadingType = LoadingType.LOADING_MORE;
                 refreshLayout.setEnableLoadMore(false);
+                loadData();
             }
 
             @Override
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
-                mLoadingType = LoadingType.LOADING_REFRESH;
                 mCurPageNo = 1;
-                mVm.getProjectArticles(mCurPageNo, mCid);
+                mLoadingType = LoadingType.LOADING_REFRESH;
+                loadData();
             }
         });
-    }
-
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if (mVm != null) {
-            mVm.dispose();
+        if (mData == null) {
+            mData = new ArrayList<>();
         }
-    }
+        if (mAdapter == null) {
+            mAdapter = new ArticleAdapter(mData);
+            mAdapter.setOnItemClickListener((view, data, pos) -> {
+                if (data instanceof ArticlesData.ArticleBean) {
+                    ArticlesData.ArticleBean ab       = (ArticlesData.ArticleBean) data;
+                    PageName                 pageName = PageName.WEB;
+                    pageName.pageParam = ab;
+                    startPage(pageName);
+                }
+            });
+        }
 
+        mBinding.rv.setAdapter(mAdapter);
+        mBinding.rv.setItemAnimator(new DefaultItemAnimator());
+        mBinding.rv.setLayoutManager(new LinearLayoutManager(mContext));
+    }
 
     static class Param implements Parcelable {
         public int cid;
 
-        public Param() {
-
+        public Param(int cid) {
+            this.cid = cid;
         }
 
         protected Param(Parcel in) {

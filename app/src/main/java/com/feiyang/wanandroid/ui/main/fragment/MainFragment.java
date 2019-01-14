@@ -11,6 +11,7 @@ import com.feiyang.wanandroid.core.constants.LoadingType;
 import com.feiyang.wanandroid.core.util.ViewModelUtils;
 import com.feiyang.wanandroid.databinding.FragmentMainBinding;
 import com.feiyang.wanandroid.ui.main.adapter.ArticleAdapter;
+import com.feiyang.wanandroid.ui.main.model.bean.ArticlesData;
 import com.feiyang.wanandroid.ui.main.model.bean.HeaderData;
 import com.feiyang.wanandroid.ui.main.vm.MainViewModel;
 import com.scwang.smartrefresh.layout.footer.ClassicsFooter;
@@ -135,8 +136,17 @@ public class MainFragment extends BaseFragment {
 
     @Override
     protected void initViews() {
+        mLoadingType=LoadingType.LOADING_ORIGIN;
         if (mAdapter == null) {
             mAdapter = new ArticleAdapter(mData);
+            mAdapter.setOnItemClickListener((view, data, pos) -> {
+                if (data instanceof ArticlesData.ArticleBean) {
+                    ArticlesData.ArticleBean ab       = (ArticlesData.ArticleBean) data;
+                    PageName                 pageName = PageName.WEB;
+                    pageName.pageParam = ab;
+                    startPage(pageName);
+                }
+            });
         }
 
         mBinding.rv.setLayoutManager(new LinearLayoutManager(mContext));
