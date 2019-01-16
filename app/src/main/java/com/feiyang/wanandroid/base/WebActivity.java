@@ -1,5 +1,8 @@
 package com.feiyang.wanandroid.base;
 
+import android.Manifest;
+import android.content.Intent;
+import android.net.Uri;
 import android.net.http.SslError;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -18,9 +21,14 @@ import com.feiyang.wanandroid.core.util.StatusBarUtils;
 import com.feiyang.wanandroid.databinding.ActivityWebBinding;
 import com.feiyang.wanandroid.ui.main.model.bean.ArticlesData;
 
+import java.util.Map;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.core.content.ContextCompat;
+
+import static androidx.core.content.PermissionChecker.PERMISSION_DENIED;
+import static com.feiyang.wanandroid.core.util.ObjectUtils.isNonNull;
 
 /**
  * Copyright:wanandroid2
@@ -29,11 +37,14 @@ import androidx.core.content.ContextCompat;
  * Desc: <br>
  */
 public class WebActivity extends BaseActivity<Parcelable, ActivityWebBinding, BaseViewModel> {
+    private ArticlesData.ArticleBean mData;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initToolbar();
         initViews();
+        observeData();
     }
 
     @Override
@@ -42,14 +53,54 @@ public class WebActivity extends BaseActivity<Parcelable, ActivityWebBinding, Ba
     }
 
     @Override
+    protected void observeData() {
+        super.observeData();
+        vm.checkPermissionResult.observe(this, result -> {
+            if (isNonNull(result)) {
+                for (Map.Entry<String, Integer> next : result.entrySet()) {
+                    if (next.getKey().equals(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                        if (next.getValue() == PERMISSION_DENIED) {
+                            showToast("您拒绝了开启分享权限.");
+                        } else {
+                            doShare();
+                        }
+                    }
+                }
+            }
+        });
+
+        vm.toast.observe(this, this::showToast);
+
+        vm.loading.observe(this, isLoading -> {
+            if (isLoading != null) {
+                if (isLoading) {
+                    showLoading();
+                }else{
+                    hideLoading();
+                }
+            }
+        });
+    }
+
+    private void doShare() {
+        if (mData==null) {
+            return ;
+        }
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.putExtra(Intent.EXTRA_TEXT, getString(R.string.share_type_url, getString(R.string.app_name), mData.getTitle(), mData.getLink()));
+        intent.setType("text/plain");
+        startActivity(intent);
+    }
+
+    @Override
     protected void initViews() {
         super.initViews();
         if (mParam != null) {
             if (mParam instanceof ArticlesData.ArticleBean) {
-                ArticlesData.ArticleBean data = (ArticlesData.ArticleBean) mParam;
-                if (TextUtils.isEmpty(data.getLink()))
+                mData = (ArticlesData.ArticleBean) mParam;
+                if (TextUtils.isEmpty(mData.getLink()))
                     return;
-                loadWeb(data.getLink());
+                loadWeb(mData.getLink());
             }
         }
 
@@ -109,8 +160,8 @@ public class WebActivity extends BaseActivity<Parcelable, ActivityWebBinding, Ba
     }
 
     @Override
-    protected Class getVM() {
-        return null;
+    protected Class<BaseViewModel> getVM() {
+        return BaseViewModel.class;
     }
 
     @Override
@@ -144,14 +195,24 @@ public class WebActivity extends BaseActivity<Parcelable, ActivityWebBinding, Ba
                 finish();
                 return true;
             case R.id.menuShare:
+                vm.verifyPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
                 break;
             case R.id.menuCollect:
+                if (mData==null)
+                    return false;
+                vm.collectArticle(mData);
                 break;
             case R.id.menuBrower:
+                if (mData == null) {
+                    return false;
+                }
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(mData.getLink())));
                 break;
         }
         return super.onOptionsItemSelected(item);
     }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

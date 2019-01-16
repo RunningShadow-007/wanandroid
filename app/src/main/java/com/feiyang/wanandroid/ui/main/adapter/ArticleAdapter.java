@@ -31,6 +31,8 @@ public class ArticleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     private OnItemClickListener onItemClickListener;
 
+    private OnItemClickListener onCollectListener;
+
     public ArticleAdapter(@NonNull List<? extends BaseItem> data) {
         this.mData = data;
     }
@@ -43,6 +45,10 @@ public class ArticleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     public void setOnItemClickListener(OnItemClickListener<? extends BaseItem> onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
+    }
+
+    public void setOnCollectListener(OnItemClickListener onCollectListener) {
+        this.onCollectListener = onCollectListener;
     }
 
     @NonNull
@@ -66,6 +72,10 @@ public class ArticleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             ((ViewHolder) holder).binding.getRoot().setOnClickListener(v -> {
                 if (onItemClickListener != null)
                     onItemClickListener.onItemClick(v, data, holder.getLayoutPosition());
+            });
+            ((ViewHolder) holder).binding.ivCollect.setOnClickListener(v -> {
+                if (onCollectListener != null)
+                    onCollectListener.onItemClick(v, data, holder.getLayoutPosition());
             });
             ((ViewHolder) holder).binding.setItem(data);
         } else if (holder instanceof HeadViewHolder) {
@@ -110,5 +120,6 @@ public class ArticleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public static void loadImage(ImageView imageView, String url) {
         Glide.with(imageView).load(url).into(imageView);
     }
+
 
 }

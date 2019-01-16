@@ -124,9 +124,20 @@ public class MainFragment extends BaseFragment {
                     mData.addAll(articleBeans);
                     mAdapter.notifyDataSetChanged();
                 }
-
             }
         });
+
+        mVm.collectData.observe(this, data -> {
+            if (data != null) {
+                int index = mData.indexOf(data);
+                if (index != -1) {
+                    data.setCollect(true);
+                    mAdapter.notifyItemChanged(index);
+                }
+            }
+        });
+
+        mVm.toast.observe(this, this::showToast);
     }
 
     @Override
@@ -136,7 +147,7 @@ public class MainFragment extends BaseFragment {
 
     @Override
     protected void initViews() {
-        mLoadingType=LoadingType.LOADING_ORIGIN;
+        mLoadingType = LoadingType.LOADING_ORIGIN;
         if (mAdapter == null) {
             mAdapter = new ArticleAdapter(mData);
             mAdapter.setOnItemClickListener((view, data, pos) -> {
@@ -145,6 +156,12 @@ public class MainFragment extends BaseFragment {
                     PageName                 pageName = PageName.WEB;
                     pageName.pageParam = ab;
                     startPage(pageName);
+                }
+            });
+            mAdapter.setOnCollectListener((view, data, pos) -> {
+                if (data instanceof ArticlesData.ArticleBean) {
+                    ArticlesData.ArticleBean ab = (ArticlesData.ArticleBean) data;
+                    mVm.collectArticle(ab);
                 }
             });
         }

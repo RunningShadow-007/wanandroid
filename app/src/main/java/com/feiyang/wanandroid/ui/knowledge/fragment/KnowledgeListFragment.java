@@ -127,6 +127,17 @@ public class KnowledgeListFragment extends BaseFragment<KnowledgeListFragment.Pa
                 mBinding.swiper.setEnableLoadMore(true);
         });
 
+        mVm.collectData.observe(this, data -> {
+            if (data!=null) {
+                int index=  mData.indexOf(data);
+                if (index!=-1){
+                    data.setCollect(true);
+                    mAdapter.notifyItemChanged(index);
+                }
+            }
+        });
+
+        mVm.toast.observe(this, this::showToast);
 
     }
 
@@ -164,6 +175,13 @@ public class KnowledgeListFragment extends BaseFragment<KnowledgeListFragment.Pa
                     PageName                 pageName = PageName.WEB;
                     pageName.pageParam = ab;
                     startPage(pageName);
+                }
+            });
+
+            mAdapter.setOnCollectListener((view, data, pos) -> {
+                if (data instanceof ArticlesData.ArticleBean) {
+                    ArticlesData.ArticleBean ab       = (ArticlesData.ArticleBean) data;
+                    mVm.collectArticle(ab);
                 }
             });
         }

@@ -6,13 +6,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.feiyang.wanandroid.base.BaseFragment;
-import com.feiyang.wanandroid.core.callback.OnItemClickListener;
 import com.feiyang.wanandroid.core.util.ViewModelUtils;
 import com.feiyang.wanandroid.core.widget.TopLinearSmoothScroller;
 import com.feiyang.wanandroid.databinding.FragmentNavBinding;
 import com.feiyang.wanandroid.ui.main.adapter.NavListAdapter;
 import com.feiyang.wanandroid.ui.main.adapter.NavTitleAdapter;
-import com.feiyang.wanandroid.ui.main.model.bean.ArticlesData;
 import com.feiyang.wanandroid.ui.main.model.bean.NaviData;
 import com.feiyang.wanandroid.ui.main.vm.MainViewModel;
 
@@ -114,11 +112,10 @@ public class NavigationFragment extends BaseFragment {
 
         if (mNavListAdapter == null) {
             mNavListAdapter = new NavListAdapter(mData);
-            mNavListAdapter.setOnTagClickListener(new OnItemClickListener<ArticlesData.ArticleBean>() {
-                @Override
-                public void onItemClick(View view, ArticlesData.ArticleBean data, int pos) {
-
-                }
+            mNavListAdapter.setOnTagClickListener((view, data, pos) -> {
+                PageName web = PageName.WEB;
+                web.pageParam = data;
+                startPage(web);
             });
         }
 

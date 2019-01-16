@@ -21,7 +21,7 @@ import io.reactivex.plugins.RxJavaPlugins;
 public class App extends Application {
     private static final String TAG = App.class.getSimpleName();
 
-    private static       App    mInstance;
+    private static App mInstance;
 
     private static volatile boolean isFirstLaunch = true;
 
@@ -68,10 +68,11 @@ public class App extends Application {
         isFirstLaunch = false;
     }
 
-    public void goLogin() {
+    public void goLogin(boolean launchByService) {
         SpUtils.invalidLogin();
         Intent intent = new Intent(this, LoginActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        int    flag   = launchByService ? Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK : Intent.FLAG_ACTIVITY_NEW_TASK;
+        intent.addFlags(flag);
         startActivity(intent);
     }
 }

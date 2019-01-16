@@ -43,6 +43,47 @@ public class NetworkObserver {
         return observable.subscribeOn(Schedulers.io())
                          .flatMap(new ResponseErrorFunction<>());
     }
+    //如果是在service请求数据,调用该方法
+    public static <T> Observable<T> onService(Observable<BaseResponse<T>> observable) {
+        return observable.subscribeOn(Schedulers.io())
+                         .flatMap(new ResponseErrorOnServiceFunction<>());
+    }
+
+    @SuppressWarnings("ResultOfMethodCallIgnored")
+    @SuppressLint("CheckResult")
+    private static class ResponseErrorOnServiceFunction<T> implements Function<BaseResponse<T>, Observable<T>> {
+
+        @Override
+        public Observable<T> apply(BaseResponse<T> tBaseResponse) {
+            if (tBaseResponse == null) {
+                Observable.just(1)
+                          .observeOn(AndroidSchedulers.mainThread())
+                          .subscribe(integer -> {
+                              Log.e(TAG, "response=null ");
+                              UiUtils.showShortToast("连接失败");
+                          });
+                throw new RuntimeException("连接失败");
+            } else {
+                int errorCode = tBaseResponse.getErrorCode();
+                if (errorCode != SUCCESS) {
+                    if (ERROR_TOKEN == tBaseResponse.getErrorCode()) {
+                        App.getApp().goLogin(true);
+                    } else {
+                        Observable.just(1)
+                                  .observeOn(AndroidSchedulers.mainThread())
+                                  .subscribe(integer -> {
+                                      Log.e(TAG, "response=null ");
+                                      UiUtils.showShortToast(tBaseResponse.getErrorMsg());
+                                  });
+                    }
+                    throw new RuntimeException(tBaseResponse.getErrorMsg() + "");
+                } else {
+                    T data = tBaseResponse.getData();
+                    return Observable.just(data);
+                }
+            }
+        }
+    }
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
     @SuppressLint("CheckResult")
@@ -62,7 +103,7 @@ public class NetworkObserver {
                 int errorCode = tBaseResponse.getErrorCode();
                 if (errorCode != SUCCESS) {
                     if (ERROR_TOKEN == tBaseResponse.getErrorCode()) {
-                        App.getApp().goLogin();
+                        App.getApp().goLogin(false);
                     } else {
                         Observable.just(1)
                                   .observeOn(AndroidSchedulers.mainThread())
