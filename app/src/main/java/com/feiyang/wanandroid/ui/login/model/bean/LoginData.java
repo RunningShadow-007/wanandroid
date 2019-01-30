@@ -5,12 +5,18 @@ import android.os.Parcelable;
 
 import java.util.List;
 
+import androidx.annotation.NonNull;
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
+
 /**
  * Copyright:wanandroid2
  * Author: liyang <br>
  * Date:2018/12/25 10:59 AM<br>
  * Desc:登录成功返回的数据 <br>
  */
+@Entity
 public class LoginData implements Parcelable {
 
     /**
@@ -29,8 +35,11 @@ public class LoginData implements Parcelable {
 
     private String icon;
 
-    private int id;
+    @NonNull
+    @PrimaryKey
+    private String id;
 
+    @Ignore
     private String password;
 
     private String token;
@@ -39,14 +48,20 @@ public class LoginData implements Parcelable {
 
     private String username;
 
+    @Ignore
     private List<?> chapterTops;
 
+    @Ignore
     private List<Integer> collectIds;
 
+    public LoginData(){
+
+    }
+    @Ignore
     protected LoginData(Parcel in) {
         email = in.readString();
         icon = in.readString();
-        id = in.readInt();
+        id = in.readString();
         password = in.readString();
         token = in.readString();
         type = in.readInt();
@@ -57,7 +72,7 @@ public class LoginData implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(email);
         dest.writeString(icon);
-        dest.writeInt(id);
+        dest.writeString(id);
         dest.writeString(password);
         dest.writeString(token);
         dest.writeInt(type);
@@ -97,11 +112,11 @@ public class LoginData implements Parcelable {
         this.icon = icon;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 

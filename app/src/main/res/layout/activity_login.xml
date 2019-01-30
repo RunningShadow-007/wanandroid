@@ -56,6 +56,7 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etPassword"
+                android:inputType="textPassword"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -75,6 +76,7 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etRePassword"
+                android:inputType="textPassword"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -106,7 +108,7 @@
             android:layout_marginTop="20dp"
             app:layout_constraintStart_toStartOf="@id/tvLoginOrReg"
             app:layout_constraintTop_toBottomOf="@id/tvLoginOrReg"
-            tools:text="没有账号?去注册" />
+            android:text="没有账号?去注册" />
         <TextView
             android:id="@+id/tvVersion"
             tools:text="v1.0.0"

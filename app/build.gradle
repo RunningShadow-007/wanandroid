@@ -1,8 +1,10 @@
+apply plugin: 'kotlin-kapt'
 apply plugin: 'com.android.application'
 
 apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
+
 
 android {
     compileSdkVersion 28
@@ -16,6 +18,13 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = ["resourcePackageName": android.defaultConfig.applicationId, "androidManifestFile": 'app/src/main/AndroidManifest.xml', "room.schemaLocation":
+                        "$projectDir/schemas".toString()]
+            }
+        }
     }
     buildTypes {
         release {
@@ -27,11 +36,12 @@ android {
         sourceCompatibility = '1.8'
         targetCompatibility = '1.8'
     }
+
     buildToolsVersion = '28.0.3'
 }
 
 dependencies {
-    def nav_version="1.0.0-alpha07"
+    def nav_version = "1.0.0-alpha07"
     def lifecycle_version = "1.1.1"
     def room_version = '2.0.0-beta01'
     def paging_version = '2.0.0-beta01'

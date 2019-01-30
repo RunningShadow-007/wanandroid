@@ -187,6 +187,8 @@ public class ArticlesData implements Parcelable {
 
         private String origin;
 
+        private long originId;
+
         private String projectLink;
 
         private long publishTime;
@@ -230,6 +232,7 @@ public class ArticlesData implements Parcelable {
             userId = in.readInt();
             visible = in.readInt();
             zan = in.readInt();
+            originId=in.readLong();
         }
 
         @Override
@@ -256,6 +259,7 @@ public class ArticlesData implements Parcelable {
             dest.writeInt(userId);
             dest.writeInt(visible);
             dest.writeInt(zan);
+            dest.writeLong(originId);
         }
 
         @Override
@@ -437,6 +441,14 @@ public class ArticlesData implements Parcelable {
 
         public int getVisible() {
             return visible;
+        }
+
+        public long getOriginId() {
+            return originId;
+        }
+
+        public void setOriginId(long originId) {
+            this.originId = originId;
         }
 
         public void setVisible(int visible) {

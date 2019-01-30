@@ -2,12 +2,16 @@ package com.feiyang.wanandroid.ui.main.activity;
 
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import com.feiyang.wanandroid.R;
 import com.feiyang.wanandroid.base.BaseActivity;
+import com.feiyang.wanandroid.core.constants.Constants;
+import com.feiyang.wanandroid.core.util.SpUtils;
 import com.feiyang.wanandroid.core.util.StatusBarUtils;
 import com.feiyang.wanandroid.databinding.ActivityMainBinding;
 import com.feiyang.wanandroid.ui.main.fragment.KnowledgeHierarchyFragment;
@@ -197,6 +201,7 @@ public class MainActivity extends BaseActivity<MainActivity.Param, ActivityMainB
                 case R.id.nav_item_about_us:
                     break;
                 case R.id.nav_item_logout:
+                    vm.logout();
                     break;
                 case R.id.nav_item_my_collect:
                     break;
@@ -207,9 +212,32 @@ public class MainActivity extends BaseActivity<MainActivity.Param, ActivityMainB
             }
             return true;
         });
+        View     headerView = databinding.navView.getHeaderView(0);
+        TextView user       = headerView.findViewById(R.id.nav_header_login_tv);
+        String   username   = SpUtils.getString(Constants.SP_KEY_USER_NAME);
+        user.setText(!TextUtils.isEmpty(username) ? username : "登录");
+
+        user.setOnClickListener(v -> {
+            if (user.getText().equals("登录")) {
+                goLogin();
+            }
+        });
     }
 
+    private void goLogin() {
+        startPage(PageName.LOGIN);
+    }
 
+    @Override
+    protected void observeData() {
+        super.observeData();
+        vm.isLogoutSuccess.observe(this, isLogout -> {
+            if (isLogout!=null&&isLogout){
+                SpUtils.invalidLogin();
+                goLogin();
+            }
+        });
+    }
 
     abstract class Param implements Parcelable {
 

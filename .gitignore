@@ -68,3 +68,6 @@ src/main/res/drawable-mdpi/
 src/main/res/drawable-xhdpi/
 src/main/res/drawable-xxhdpi/
 src/main/res/drawable-xxxhdpi/
+schemas/
+src/main/res/values-zh/
+/app/schemas/com.feiyang.wanandroid.core.db.Db/2.json

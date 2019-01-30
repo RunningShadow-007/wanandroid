@@ -137,6 +137,16 @@ public class MainFragment extends BaseFragment {
             }
         });
 
+        mVm.uncollectData.observe(this,data->{
+            if (data != null) {
+                int index = mData.indexOf(data);
+                if (index != -1) {
+                    data.setCollect(false);
+                    mAdapter.notifyItemChanged(index);
+                }
+            }
+        });
+
         mVm.toast.observe(this, this::showToast);
     }
 
@@ -161,7 +171,10 @@ public class MainFragment extends BaseFragment {
             mAdapter.setOnCollectListener((view, data, pos) -> {
                 if (data instanceof ArticlesData.ArticleBean) {
                     ArticlesData.ArticleBean ab = (ArticlesData.ArticleBean) data;
-                    mVm.collectArticle(ab);
+                    if (ab.isCollect())
+                        mVm.uncollect(ab, false);
+                    else
+                        mVm.collectArticle(ab);
                 }
             });
         }

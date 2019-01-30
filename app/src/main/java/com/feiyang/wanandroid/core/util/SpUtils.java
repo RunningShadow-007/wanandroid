@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import android.util.Base64;
 
 import com.feiyang.wanandroid.App;
+import com.feiyang.wanandroid.core.constants.Constants;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -16,12 +17,14 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
+import static com.feiyang.wanandroid.core.constants.Constants.SP_KEY_LOGIN_TOKEN;
+import static com.feiyang.wanandroid.core.constants.Constants.SP_KEY_LOGIN_USER_NAME;
+import static com.feiyang.wanandroid.core.constants.Constants.SP_KEY_USER_NAME;
+
 public class SpUtils {
-    private static final String SP_NAME_WAN_ANDROID = "lsez_sp_tag";
+    private static final String SP_NAME_WAN_ANDROID = "sp_tag";
 
-    private static final String SP_KEY_LOGIN_TOKEN = "login_token";
 
-    private static final String SP_KEY_LOGIN_USER_NAME = "login_user_name";
 
     private static SharedPreferences sp;
 
@@ -51,6 +54,7 @@ public class SpUtils {
 
     public static void setUserName(String userName) {
         putString(SP_KEY_LOGIN_USER_NAME, userName);
+        putString(SP_KEY_USER_NAME,userName);
     }
 
     public static String getUserName() {
@@ -64,7 +68,7 @@ public class SpUtils {
      * @param key   字符串的键
      * @param value 字符串的值
      */
-    public static void putString(String key, String value) {
+    public static void putString(@Constants.SP_KEYS String key, String value) {
         SharedPreferences preferences = getSp();
         //存入数据
         SharedPreferences.Editor editor = preferences.edit();
@@ -77,7 +81,7 @@ public class SpUtils {
      *
      * @param key
      */
-    public static void removeString(String key) {
+    public static void removeString(@Constants.SP_KEYS String key) {
         SharedPreferences preferences = getSp();
         //存入数据
         SharedPreferences.Editor editor = preferences.edit();
@@ -91,7 +95,7 @@ public class SpUtils {
      * @param key 字符串的键
      * @return 得到的字符串
      */
-    public static String getString(String key) {
+    public static String getString(@Constants.SP_KEYS String key) {
         SharedPreferences preferences = getSp();
         return preferences.getString(key, "");
     }
@@ -103,7 +107,7 @@ public class SpUtils {
      * @param value 字符串的默认值
      * @return 得到的字符串
      */
-    public static String getString(String key, String value) {
+    public static String getString(@Constants.SP_KEYS String key, String value) {
         SharedPreferences preferences = getSp();
         return preferences.getString(key, value);
     }
@@ -114,7 +118,7 @@ public class SpUtils {
      * @param key   键
      * @param value 值
      */
-    public static void putBoolean(String key, boolean value) {
+    public static void putBoolean(@Constants.SP_KEYS String key, boolean value) {
         SharedPreferences        sp     = getSp();
         SharedPreferences.Editor editor = sp.edit();
         editor.putBoolean(key, value);
@@ -128,7 +132,7 @@ public class SpUtils {
      * @param defValue 默认值
      * @return 返回保存的值
      */
-    public static boolean getBoolean(String key, boolean defValue) {
+    public static boolean getBoolean(@Constants.SP_KEYS String key, boolean defValue) {
         SharedPreferences sp = getSp();
         return sp.getBoolean(key, defValue);
     }
@@ -139,7 +143,7 @@ public class SpUtils {
      * @param key   键
      * @param value 值
      */
-    public static void putLong(String key, long value) {
+    public static void putLong(@Constants.SP_KEYS String key, long value) {
         SharedPreferences        sp     = getSp();
         SharedPreferences.Editor editor = sp.edit();
         editor.putLong(key, value);
@@ -153,7 +157,7 @@ public class SpUtils {
      * @param defValue 默认值
      * @return 保存的值
      */
-    public static long getLong(String key, long defValue) {
+    public static long getLong(@Constants.SP_KEYS String key, long defValue) {
         SharedPreferences sp = getSp();
         return sp.getLong(key, defValue);
     }
@@ -164,7 +168,7 @@ public class SpUtils {
      * @param key   键
      * @param value 值
      */
-    public static void putInt(String key, int value) {
+    public static void putInt(@Constants.SP_KEYS String key, int value) {
         SharedPreferences        sp     = getSp();
         SharedPreferences.Editor editor = sp.edit();
         editor.putInt(key, value);
@@ -178,7 +182,7 @@ public class SpUtils {
      * @param defValue 默认值
      * @return 保存的值
      */
-    public static int getInt(String key, int defValue) {
+    public static int getInt(@Constants.SP_KEYS String key, int defValue) {
         SharedPreferences sp = getSp();
         return sp.getInt(key, defValue);
     }
@@ -190,7 +194,7 @@ public class SpUtils {
      * @param obj 要保存的对象（Serializable的子类）
      * @param <T> 泛型定义
      */
-    public static <T extends Serializable> void putObject(String key, T obj) {
+    public static <T extends Serializable> void putObject(@Constants.SP_KEYS String key, T obj) {
         try {
             put(key, obj);
         } catch (Exception e) {
@@ -205,7 +209,7 @@ public class SpUtils {
      * @param <T> 指定泛型
      * @return 泛型对象
      */
-    public static <T extends Serializable> T getObject(String key) {
+    public static <T extends Serializable> T getObject(@Constants.SP_KEYS String key) {
         try {
             return (T) get(key);
         } catch (Exception e) {
@@ -220,7 +224,7 @@ public class SpUtils {
      * @param key  存储的键
      * @param list 存储的集合
      */
-    public static void putList(String key, List<? extends Serializable> list) {
+    public static void putList(@Constants.SP_KEYS String key, List<? extends Serializable> list) {
         try {
             put(key, list);
         } catch (Exception e) {
@@ -235,7 +239,7 @@ public class SpUtils {
      * @param <E> 指定泛型
      * @return List集合
      */
-    public static <E extends Serializable> List<E> getList(String key) {
+    public static <E extends Serializable> List<E> getList(@Constants.SP_KEYS String key) {
         try {
             return (List<E>) get(key);
         } catch (Exception e) {
@@ -252,7 +256,7 @@ public class SpUtils {
      * @param <K> 指定Map的键
      * @param <V> 指定Map的值
      */
-    public static <K extends Serializable, V extends Serializable> void putMap(String key, Map<K, V> map) {
+    public static <K extends Serializable, V extends Serializable> void putMap(@Constants.SP_KEYS String key, Map<K, V> map) {
         try {
             put(key, map);
         } catch (Exception e) {
@@ -260,7 +264,7 @@ public class SpUtils {
         }
     }
 
-    public static <K extends Serializable, V extends Serializable> Map<K, V> getMap(String key) {
+    public static <K extends Serializable, V extends Serializable> Map<K, V> getMap(@Constants.SP_KEYS String key) {
         try {
             return (Map<K, V>) get(key);
         } catch (Exception e) {
@@ -272,7 +276,7 @@ public class SpUtils {
     /**
      * 存储对象
      */
-    private static void put(String key, Object obj)
+    private static void put(@Constants.SP_KEYS String key, Object obj)
             throws IOException {
         if (obj == null) {//判断对象是否为空
             return;
@@ -293,7 +297,7 @@ public class SpUtils {
     /**
      * 获取对象
      */
-    private static Object get(String key)
+    private static Object get(@Constants.SP_KEYS String key)
             throws IOException, ClassNotFoundException {
         String wordBase64 = getString(key);
         // 将base64格式字符串还原成byte数组

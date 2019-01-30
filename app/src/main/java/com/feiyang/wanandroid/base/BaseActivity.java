@@ -21,6 +21,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.databinding.ViewDataBinding;
+import androidx.lifecycle.ViewModel;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 
@@ -33,7 +34,7 @@ import static com.feiyang.wanandroid.core.util.ViewModelUtils.obtainViewModel;
  * Desc: <br>
  */
 @SuppressLint("Registered")
-public abstract class BaseActivity<Param extends Parcelable, D extends ViewDataBinding, VM extends BaseViewModel> extends AppCompatActivity implements IPage {
+public abstract class BaseActivity<Param extends Parcelable, D extends ViewDataBinding, VM extends ViewModel> extends AppCompatActivity implements IPage {
     private static final long TOAST_INTERNAL = 2000;
 
     protected CompositeDisposable mDisposable;
@@ -74,7 +75,7 @@ public abstract class BaseActivity<Param extends Parcelable, D extends ViewDataB
 
     }
 
-    private void initArgs(@Nullable Bundle savedInstanceState) {
+    protected void initArgs(@Nullable Bundle savedInstanceState) {
         if (savedInstanceState != null) {
             mParam =  savedInstanceState.getParcelable(IPage.PAGE_PARAM);
         } else {
@@ -206,7 +207,10 @@ public abstract class BaseActivity<Param extends Parcelable, D extends ViewDataB
             mLoadingDialog = null;
         }
         if (vm != null) {
-            vm.dispose();
+            if (vm instanceof BaseViewModel) {
+                ((BaseViewModel)vm).dispose();
+            }
+
         }
     }
 

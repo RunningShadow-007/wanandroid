@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.feiyang.wanandroid.App;
 import com.feiyang.wanandroid.base.BaseResponse;
+import com.feiyang.wanandroid.core.util.Optional;
 import com.feiyang.wanandroid.core.util.UiUtils;
 
 import java.lang.annotation.Retention;
@@ -39,22 +40,23 @@ public class NetworkObserver {
 
     }
 
-    public static <T> Observable<T> on(Observable<BaseResponse<T>> observable) {
+    public static <T> Observable<Optional<T>> on(Observable<BaseResponse<T>> observable) {
         return observable.subscribeOn(Schedulers.io())
                          .flatMap(new ResponseErrorFunction<>());
     }
+
     //如果是在service请求数据,调用该方法
-    public static <T> Observable<T> onService(Observable<BaseResponse<T>> observable) {
+    public static <T> Observable<Optional<T>> onService(Observable<BaseResponse<T>> observable) {
         return observable.subscribeOn(Schedulers.io())
                          .flatMap(new ResponseErrorOnServiceFunction<>());
     }
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
     @SuppressLint("CheckResult")
-    private static class ResponseErrorOnServiceFunction<T> implements Function<BaseResponse<T>, Observable<T>> {
+    private static class ResponseErrorOnServiceFunction<T> implements Function<BaseResponse<T>, Observable<Optional<T>>> {
 
         @Override
-        public Observable<T> apply(BaseResponse<T> tBaseResponse) {
+        public Observable<Optional<T>> apply(BaseResponse<T> tBaseResponse) {
             if (tBaseResponse == null) {
                 Observable.just(1)
                           .observeOn(AndroidSchedulers.mainThread())
@@ -79,7 +81,7 @@ public class NetworkObserver {
                     throw new RuntimeException(tBaseResponse.getErrorMsg() + "");
                 } else {
                     T data = tBaseResponse.getData();
-                    return Observable.just(data);
+                    return Observable.just(Optional.ofNullable(data));
                 }
             }
         }
@@ -87,10 +89,10 @@ public class NetworkObserver {
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
     @SuppressLint("CheckResult")
-    private static class ResponseErrorFunction<T> implements Function<BaseResponse<T>, Observable<T>> {
+    private static class ResponseErrorFunction<T> implements Function<BaseResponse<T>, Observable<Optional<T>>> {
 
         @Override
-        public Observable<T> apply(BaseResponse<T> tBaseResponse) {
+        public Observable<Optional<T>> apply(BaseResponse<T> tBaseResponse) {
             if (tBaseResponse == null) {
                 Observable.just(1)
                           .observeOn(AndroidSchedulers.mainThread())
@@ -108,14 +110,14 @@ public class NetworkObserver {
                         Observable.just(1)
                                   .observeOn(AndroidSchedulers.mainThread())
                                   .subscribe(integer -> {
-                                      Log.e(TAG, "response=null ");
+                                      Log.e(TAG, String.format("error_code is %s,error_msg is %s", errorCode, tBaseResponse.getErrorMsg()));
                                       UiUtils.showShortToast(tBaseResponse.getErrorMsg());
                                   });
                     }
                     throw new RuntimeException(tBaseResponse.getErrorMsg() + "");
                 } else {
                     T data = tBaseResponse.getData();
-                    return Observable.just(data);
+                    return Observable.just(Optional.ofNullable(data));
                 }
             }
         }

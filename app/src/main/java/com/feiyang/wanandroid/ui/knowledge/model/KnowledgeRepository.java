@@ -3,6 +3,7 @@ package com.feiyang.wanandroid.ui.knowledge.model;
 import com.feiyang.wanandroid.core.net.ApiService;
 import com.feiyang.wanandroid.core.net.NetworkObserver;
 import com.feiyang.wanandroid.core.net.ServiceProvider;
+import com.feiyang.wanandroid.core.util.Optional;
 import com.feiyang.wanandroid.ui.main.model.bean.ArticlesData;
 
 import io.reactivex.Observable;
@@ -40,7 +41,7 @@ public class KnowledgeRepository {
      * @param cid    分类的id，上述二级目录的id
      * @return
      */
-    public Observable<ArticlesData> getKnowledgeArticleList(int pageNo, int cid) {
+    public Observable<Optional<ArticlesData>> getKnowledgeArticleList(int pageNo, int cid) {
         return NetworkObserver.on(mRemote.getKnowledgeArticleList(pageNo, cid));
     }
 

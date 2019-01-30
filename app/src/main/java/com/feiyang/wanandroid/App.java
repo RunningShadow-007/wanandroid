@@ -36,7 +36,7 @@ public class App extends Application {
         if (BuildConfig.DEBUG) {
             Stetho.initializeWithDefaults(this);
         }
-        RxJavaPlugins.setErrorHandler(throwable -> Log.e(TAG, "onCreate: ", throwable));
+        RxJavaPlugins.setErrorHandler(throwable -> Log.e(TAG, "RxJava 触发了onError: ", throwable));
     }
 
     @Override

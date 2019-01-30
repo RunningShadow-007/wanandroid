@@ -3,8 +3,7 @@ package com.feiyang.wanandroid.ui.main.vm;
 import android.app.Application;
 import android.util.Log;
 
-import com.feiyang.wanandroid.base.BaseViewModel;
-import com.feiyang.wanandroid.core.util.ObjectUtils;
+import com.feiyang.wanandroid.ui.login.vm.LoginViewModel;
 import com.feiyang.wanandroid.ui.main.model.MainRepository;
 import com.feiyang.wanandroid.ui.main.model.bean.ArticlesData;
 import com.feiyang.wanandroid.ui.main.model.bean.BannerData;
@@ -25,7 +24,7 @@ import io.reactivex.disposables.Disposable;
  * Desc: <br>
  */
 @SuppressWarnings("JavaDoc")
-public class MainViewModel extends BaseViewModel {
+public class MainViewModel extends LoginViewModel {
     public static final String TAG = MainViewModel.class.getSimpleName();
 
     private MainRepository mRepository;
@@ -54,7 +53,9 @@ public class MainViewModel extends BaseViewModel {
 
     public void getBannerList() {
         Disposable subscribe = mRepository.getBannerList()
-                                          .subscribe(bannerData -> bannerList.postValue(bannerData));
+                                          .subscribe(bannerData -> {
+                                                  bannerList.postValue(bannerData.orElse(null));
+                                          });
         disposable.add(subscribe);
     }
 
@@ -68,8 +69,10 @@ public class MainViewModel extends BaseViewModel {
                                           .doOnSubscribe(disposable -> loading.postValue(true))
                                           .doOnTerminate(() -> loading.postValue(false))
                                           .subscribe(articlesData -> {
-                                              pageCount.postValue(articlesData.getPageCount());
-                                              articleList.postValue(articlesData.getDatas());
+                                              if (articlesData.isPresent()){
+                                                  pageCount.postValue(articlesData.get().getPageCount());
+                                                  articleList.postValue(articlesData.get().getDatas());
+                                              }
                                           }, throwable -> isLoadFailed.postValue(null));
         disposable.add(subscribe);
     }
@@ -84,7 +87,7 @@ public class MainViewModel extends BaseViewModel {
                                           .doOnSubscribe(disposable -> loading.postValue(true))
                                           .doOnTerminate(() -> loading.postValue(false))
                                           .subscribe(knowledgeHierarchyData -> {
-                                              hierarchyList.postValue(knowledgeHierarchyData);
+                                              hierarchyList.postValue(knowledgeHierarchyData.orElse(null));
                                           }, throwable -> Log.e(TAG, "getKnowledgeHierarchyList: ", throwable));
         disposable.add(subscribe);
     }
@@ -101,9 +104,7 @@ public class MainViewModel extends BaseViewModel {
                                           .doOnSubscribe(disposable -> loading.postValue(true))
                                           .doOnTerminate(() -> loading.postValue(false))
                                           .subscribe(naviData -> {
-                                              if (ObjectUtils.isNonNull(naviData)) {
-                                                  navList.postValue(naviData);
-                                              }
+                                                  navList.postValue(naviData.orElse(null));
                                           }, throwable -> Log.e(TAG, "getNaviList: ", throwable));
         disposable.add(subscribe);
     }
@@ -122,7 +123,7 @@ public class MainViewModel extends BaseViewModel {
                                           .doOnSubscribe(disposable -> loading.postValue(true))
                                           .doOnTerminate(() -> loading.postValue(false))
                                           .subscribe(data -> {
-                                              projectCateList.postValue(data);
+                                              projectCateList.postValue(data.orElse(null));
                                           }, throwable -> Log.e(TAG, "getProjectCateList", throwable));
         disposable.add(subscribe);
     }
@@ -132,7 +133,7 @@ public class MainViewModel extends BaseViewModel {
                                           .doOnSubscribe(disposable -> loading.postValue(true))
                                           .doOnTerminate(() -> loading.postValue(false))
                                           .subscribe(data -> {
-                                              projectArticles.postValue(data);
+                                              projectArticles.postValue(data.orElse(null));
                                           }, throwable -> Log.e(TAG, "getProjectCateList", throwable));
         disposable.add(subscribe);
     }

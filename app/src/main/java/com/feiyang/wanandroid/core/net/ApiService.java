@@ -12,9 +12,12 @@ import com.feiyang.wanandroid.ui.main.model.bean.ProjectCategoryData;
 import com.feiyang.wanandroid.ui.main.model.bean.SiteData;
 
 import java.util.List;
+import java.util.Map;
 
 import io.reactivex.Observable;
-import retrofit2.http.Body;
+import retrofit2.http.Field;
+import retrofit2.http.FieldMap;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
@@ -110,50 +113,24 @@ public interface ApiService {
     /**
      * 登录接口
      *
-     * @param param
+     * @param param (username,password)
      * @return
      */
     @POST("user/login")
-    Observable<BaseResponse<LoginData>> login(@Body LoginParam param);
+    @FormUrlEncoded
+    Observable<BaseResponse<LoginData>> login(@FieldMap Map<String, String> param);
 
-    class LoginParam {
-        public String username;
-
-        public String password;
-
-        public LoginParam(String username, String password) {
-            this.username = username;
-            this.password = password;
-        }
-
-        public LoginParam() {
-        }
-    }
 
     /**
      * 注册接口
      *
+     * @param param (username,password,repassword)
      * @return
      */
     @POST("user/register")
-    Observable<BaseResponse<LoginData>> regist(@Body RegistParam param);
+    @FormUrlEncoded
+    Observable<BaseResponse<LoginData>> regist(@FieldMap Map<String, String> param);
 
-    class RegistParam {
-        public String username;
-
-        public String password;
-
-        public String repassword;
-
-        public RegistParam() {
-        }
-
-        public RegistParam(String username, String password, String repassword) {
-            this.username = username;
-            this.password = password;
-            this.repassword = repassword;
-        }
-    }
 
     /**
      * 退出
@@ -184,24 +161,12 @@ public interface ApiService {
     /**
      * 收藏站外文章
      *
-     * @param param
      * @return
      */
     @POST("lg/collect/add/json")
-    Observable<BaseResponse<Object>> collectOuterArticle(@Body CollectOuterParam param);
+    @FormUrlEncoded
+    Observable<BaseResponse<Object>> collectOuterArticle(@Field("title") String title, @Field("author") String author, @Field("link") String link);
 
-    class CollectOuterParam {
-        public String title, author, link;
-
-        public CollectOuterParam(String title, String author, String link) {
-            this.title = title;
-            this.author = author;
-            this.link = link;
-        }
-
-        public CollectOuterParam() {
-        }
-    }
 
     /**
      * 取消收藏(文章列表)
@@ -216,22 +181,13 @@ public interface ApiService {
      * 取消收藏(我的收藏页面（该页面包含自己录入的内容）)
      *
      * @param id
-     * @param param{originId 列表页下发，无则为-1}
+     * @param originId {originId 列表页下发，无则为-1}
      * @return
      */
-    @POST("lg/uncollect_originId/{id}/json")
-    Observable<BaseResponse<Object>> uncollect(@Path("id") long id, @Body UncollectParam param);
+    @POST("lg/uncollect/{id}/json")
+    @FormUrlEncoded
+    Observable<BaseResponse<Object>> uncollect(@Path("id") long id, @Field("originId") long originId);
 
-    class UncollectParam {
-        public long originId = -1;
-
-        public UncollectParam(long originId) {
-            this.originId = originId;
-        }
-
-        public UncollectParam() {
-        }
-    }
 
     /**
      * 收藏网站列表
@@ -247,19 +203,10 @@ public interface ApiService {
      * @return
      */
     @POST("lg/collect/addtool/json")
-    Observable<BaseResponse<Object>> collectSite(@Body CollectOuterParam param);
+    @FormUrlEncoded
+    Observable<BaseResponse<Object>> collectSite(@Field("name") String name, @Field("link") String link);
 
-    class CollectSiteParam {
-        public String name, link;
 
-        public CollectSiteParam(String name, String link) {
-            this.name = name;
-            this.link = link;
-        }
-
-        public CollectSiteParam() {
-        }
-    }
 
     /**
      * 删除收藏网站
@@ -267,24 +214,21 @@ public interface ApiService {
      * @return
      */
     @POST("lg/collect/deletetool/json")
-    Observable<BaseResponse<Object>> deleteCollectSite(@Body DeleteCollectSiteParam param);
+    @FormUrlEncoded
+    Observable<BaseResponse<Object>> deleteCollectSite(@Field("id") String id);
 
-    class DeleteCollectSiteParam {
-        public long id;
-    }
 
     /**
      * 搜索
+     *
      * @param pageNo
-     * @param param
+     * @param k
      * @return
      */
     @POST("article/query/{pageNo}/json")
-    Observable<BaseResponse<ArticlesData>> queryByWords(@Path("pageNo") int pageNo, @Body QueryParam param);
+    @FormUrlEncoded
+    Observable<BaseResponse<ArticlesData>> queryByWords(@Path("pageNo") int pageNo, @Field("k") String k);
 
-    class QueryParam {
-        public String k;
-    }
 
 
 }

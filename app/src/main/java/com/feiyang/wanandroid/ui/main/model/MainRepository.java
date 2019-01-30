@@ -3,6 +3,7 @@ package com.feiyang.wanandroid.ui.main.model;
 import com.feiyang.wanandroid.core.net.ApiService;
 import com.feiyang.wanandroid.core.net.NetworkObserver;
 import com.feiyang.wanandroid.core.net.ServiceProvider;
+import com.feiyang.wanandroid.core.util.Optional;
 import com.feiyang.wanandroid.ui.main.model.bean.ArticlesData;
 import com.feiyang.wanandroid.ui.main.model.bean.BannerData;
 import com.feiyang.wanandroid.ui.main.model.bean.HotWordsData;
@@ -44,7 +45,7 @@ public class MainRepository {
         return INSTANCE;
     }
 
-    public Observable<ArticlesData> getArticleList(int pageNo) {
+    public Observable<Optional<ArticlesData>> getArticleList(int pageNo) {
         return NetworkObserver.on(mRemote.getArticleList(pageNo));
     }
 
@@ -53,7 +54,7 @@ public class MainRepository {
      *
      * @return
      */
-    public Observable<List<BannerData>> getBannerList() {
+    public Observable<Optional<List<BannerData>>> getBannerList() {
         return NetworkObserver.on(mRemote.getBannerList());
     }
 
@@ -62,7 +63,7 @@ public class MainRepository {
      *
      * @return
      */
-    public Observable<List<KnowledgeHierarchyData>> getKnowledgeHierarchyList() {
+    public Observable<Optional<List<KnowledgeHierarchyData>>> getKnowledgeHierarchyList() {
         return NetworkObserver.on(mRemote.getKnowledgeHierarchyList());
     }
 
@@ -73,7 +74,7 @@ public class MainRepository {
      *
      * @return
      */
-    public Observable<List<SiteData>> getSiteList() {
+    public Observable<Optional<List<SiteData>>> getSiteList() {
         return NetworkObserver.on(mRemote.getSiteList());
     }
 
@@ -83,7 +84,7 @@ public class MainRepository {
      *
      * @return
      */
-    public Observable<List<HotWordsData>> getHotWordsList() {
+    public Observable<Optional<List<HotWordsData>>> getHotWordsList() {
         return NetworkObserver.on(mRemote.getHotWordsList());
     }
 
@@ -92,7 +93,7 @@ public class MainRepository {
      *
      * @return
      */
-    public Observable<List<NaviData>> getNaviList() {
+    public Observable<Optional<List<NaviData>>> getNaviList() {
         return NetworkObserver.on(mRemote.getNaviList());
     }
 
@@ -101,7 +102,7 @@ public class MainRepository {
      *
      * @return
      */
-    public Observable<List<ProjectCategoryData>> getProjectCateList() {
+    public Observable<Optional<List<ProjectCategoryData>>> getProjectCateList() {
         return NetworkObserver.on(mRemote.getProjectCateList());
     }
 
@@ -113,7 +114,7 @@ public class MainRepository {
      * @param cid    cid 分类的id，上面项目分类接口
      * @return
      */
-    public Observable<ArticlesData> getProjectArticles(int pageNo, int cid) {
+    public Observable<Optional<ArticlesData>> getProjectArticles(int pageNo, int cid) {
         return NetworkObserver.on(mRemote.getProjectArticles(pageNo, cid));
     }
 

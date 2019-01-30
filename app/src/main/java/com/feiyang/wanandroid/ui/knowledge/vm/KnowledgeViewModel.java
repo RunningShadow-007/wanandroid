@@ -43,7 +43,7 @@ public class KnowledgeViewModel extends BaseViewModel {
                                           .doOnSubscribe(disposable -> loading.postValue(true))
                                           .doOnTerminate(() -> loading.postValue(false))
                                           .subscribe(articlesData -> {
-                                              hierarchyArticleList.postValue(articlesData);
+                                              hierarchyArticleList.postValue(articlesData.orElse(null));
                                           }, throwable -> {
                                               Log.e(TAG, "getKnowledgeArticleList: ", throwable);
                                               isLoadFailed.postValue(null);

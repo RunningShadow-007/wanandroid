@@ -7,6 +7,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 import androidx.annotation.IntDef;
+import androidx.annotation.StringDef;
 
 /**
  * Copyright:wanandroid2
@@ -31,6 +32,23 @@ public class Constants {
     @Retention(RetentionPolicy.RUNTIME)
     @IntDef({TYPE_DATA, TYPE_FOOTER, TYPE_HEADER})
     public @interface ITEM_TYPE {
+
+    }
+
+    public static final String SP_KEY_USER_ID = "SP_KEY_USER_ID";
+
+
+    public static final String SP_KEY_PASSWORD = "SP_KEY_PASSWORD";
+
+    public static final String SP_KEY_LOGIN_TOKEN = "login_token";
+
+    public static final String SP_KEY_LOGIN_USER_NAME = "login_user_name";
+
+    public static final String SP_KEY_USER_NAME = "username";
+
+    @Retention(RetentionPolicy.RUNTIME)
+    @StringDef({SP_KEY_USER_ID, SP_KEY_PASSWORD, SP_KEY_LOGIN_USER_NAME, SP_KEY_LOGIN_TOKEN, SP_KEY_USER_NAME})
+    public @interface SP_KEYS {
 
     }
 }
