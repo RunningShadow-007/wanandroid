@@ -27,7 +27,7 @@ public class LoginRepository {
     private UserDao mLocal;
 
     private LoginRepository() {
-        mRemote = ServiceProvider.getInstance().provide(ApiService.class);
+        mRemote = ServiceProvider.getInstance().getRetrofit(ServiceProvider.BASE_URLS).create(ApiService.class);
         mLocal = Db.getInstance().getUserDao();
     }
 
@@ -42,7 +42,7 @@ public class LoginRepository {
         return INSTANCE;
     }
 
-    public Observable<Optional<LoginData>> login(Map<String,String> param) {
+    public Observable<Optional<LoginData>> login(Map<String, String> param) {
         return NetworkObserver.on(mRemote.login(param))
                               .map(data -> {
                                   if (data.isPresent()) {
@@ -57,7 +57,7 @@ public class LoginRepository {
      *
      * @return
      */
-    public Observable<Optional<LoginData>> regist(Map<String,String> param) {
+    public Observable<Optional<LoginData>> regist(Map<String, String> param) {
         return NetworkObserver.on(mRemote.regist(param));
     }
 
@@ -67,7 +67,8 @@ public class LoginRepository {
      * @return
      */
     public Observable<Optional<Object>> logout() {
-        return NetworkObserver.on(mRemote.logout());
+        ApiService service = ServiceProvider.getInstance().provide(ApiService.class);
+        return NetworkObserver.on(service.logout());
     }
 
 }

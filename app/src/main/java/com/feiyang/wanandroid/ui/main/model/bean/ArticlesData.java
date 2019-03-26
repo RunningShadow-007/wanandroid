@@ -8,6 +8,8 @@ import com.feiyang.wanandroid.core.constants.Constants;
 
 import java.util.List;
 
+import androidx.annotation.Nullable;
+
 /**
  * Copyright:wanandroid2
  * Author: liyang <br>
@@ -209,6 +211,22 @@ public class ArticlesData implements Parcelable {
 
         private List<TagBean> tags;
 
+        @Override
+        public boolean equals(@Nullable Object obj) {
+            if (obj == null) {
+                return false;
+            }
+            ArticleBean bean = (ArticleBean) obj;
+            boolean     a, b, c, d, e;
+            if (bean.apkLink != null) {
+                a = bean.apkLink.equals(apkLink);
+            }
+            b = bean.collect==collect;
+
+
+            return super.equals(obj);
+        }
+
         protected ArticleBean(Parcel in) {
             apkLink = in.readString();
             author = in.readString();
@@ -232,7 +250,7 @@ public class ArticlesData implements Parcelable {
             userId = in.readInt();
             visible = in.readInt();
             zan = in.readInt();
-            originId=in.readLong();
+            originId = in.readLong();
         }
 
         @Override
@@ -416,7 +434,7 @@ public class ArticlesData implements Parcelable {
         }
 
         public String getTitle() {
-            return title==null?"":title;
+            return title == null ? "" : title;
         }
 
         public void setTitle(String title) {

@@ -112,7 +112,7 @@ public class LoginActivity extends BaseActivity<Parcelable, ActivityLoginBinding
         Drawable enabledDrawable  = ContextCompat.getDrawable(this, R.drawable.bg_shape_solid_blue_radius_3dp);
         Drawable disabledDrawable = ContextCompat.getDrawable(this, R.drawable.bg_shape_solid_grey_radius_4dp);
 
-        int textColor=ContextCompat.getColor(this, isPassed ? R.color.white : R.color.textColor999);
+        int textColor = ContextCompat.getColor(this, isPassed ? R.color.white : R.color.textColor999);
 
         databinding.tvLoginOrReg.setBackground(isPassed ? enabledDrawable : disabledDrawable);
         databinding.tvLoginOrReg.setTextColor(textColor);
@@ -135,8 +135,9 @@ public class LoginActivity extends BaseActivity<Parcelable, ActivityLoginBinding
         vm.isLoginSuccess.observe(this, aBoolean -> {
             toggleButtonStatus(true);
             if (aBoolean) {
+                showToast("登录成功!");
                 SpUtils.putString(Constants.SP_KEY_PASSWORD, Base64.encodeToString(params.get("password").getBytes(), Base64.DEFAULT));
-                SpUtils.putString(Constants.SP_KEY_USER_NAME,params.get("username"));
+                SpUtils.putString(Constants.SP_KEY_USER_NAME, params.get("username"));
                 startPage(PageName.MAIN);
                 finish();
             }
