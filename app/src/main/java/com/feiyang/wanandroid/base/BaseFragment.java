@@ -19,6 +19,8 @@ import com.feiyang.wanandroid.R;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.ActivityOptionsCompat;
 import androidx.fragment.app.Fragment;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
@@ -59,10 +61,10 @@ public abstract class BaseFragment<Param extends Parcelable> extends Fragment im
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (savedInstanceState != null) {
-            param =  savedInstanceState.getParcelable(IPage.PAGE_PARAM);
+            param = savedInstanceState.getParcelable(IPage.PAGE_PARAM);
         } else {
             if (getArguments() != null) {
-                param =  getArguments().getParcelable(IPage.PAGE_PARAM);
+                param = getArguments().getParcelable(IPage.PAGE_PARAM);
             }
         }
         handler = new Handler(Looper.getMainLooper());
@@ -71,12 +73,11 @@ public abstract class BaseFragment<Param extends Parcelable> extends Fragment im
     }
 
 
-
     protected void loadData() {
 
     }
 
-    protected void observeData(){
+    protected void observeData() {
 
     }
 
@@ -132,11 +133,11 @@ public abstract class BaseFragment<Param extends Parcelable> extends Fragment im
         post(() -> {
             if (isValidContext((Activity) mContext)) {
                 if (mLoadingDialog == null) {
-                    mLoadingDialog = new AlertDialog.Builder(mContext,R.style.common_dialog_style).create();
+                    mLoadingDialog = new AlertDialog.Builder(mContext, R.style.common_dialog_style).create();
                     mLoadingDialog.setCanceledOnTouchOutside(true);
                 }
-                LottieAnimationView    loadingView  = new LottieAnimationView(mContext);
-                ViewGroup.LayoutParams params=new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                LottieAnimationView    loadingView = new LottieAnimationView(mContext);
+                ViewGroup.LayoutParams params      = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 loadingView.setLayoutParams(params);
                 loadingView.setAnimation(R.raw.loader);
                 loadingView.setRepeatCount(LottieDrawable.INFINITE);
@@ -171,10 +172,19 @@ public abstract class BaseFragment<Param extends Parcelable> extends Fragment im
 
     @Override
     public void startPage(PageName pageName) {
+        startPage(pageName, null);
+    }
+
+    @Override
+    public void startPage(PageName pageName, ActivityOptionsCompat options) {
         Intent intent = new Intent(mContext, pageName.target);
         intent.putExtra(IPage.PAGE_PARAM, pageName.pageParam);
         pageName.pageParam = null;
-        startActivity(intent);
+        if (options != null) {
+            ActivityCompat.startActivity(mContext, intent, options.toBundle());
+        } else {
+            startActivity(intent);
+        }
     }
 
     @Override

@@ -26,6 +26,7 @@ import java.util.Map;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.core.content.ContextCompat;
+import androidx.core.view.ViewCompat;
 
 import static androidx.core.content.PermissionChecker.PERMISSION_DENIED;
 import static com.feiyang.wanandroid.core.util.ObjectUtils.isNonNull;
@@ -45,6 +46,7 @@ public class WebActivity extends BaseActivity<Parcelable, ActivityWebBinding, Ba
         initToolbar();
         initViews();
         observeData();
+
     }
 
     @Override
@@ -75,7 +77,7 @@ public class WebActivity extends BaseActivity<Parcelable, ActivityWebBinding, Ba
             if (isLoading != null) {
                 if (isLoading) {
                     showLoading();
-                }else{
+                } else {
                     hideLoading();
                 }
             }
@@ -83,8 +85,8 @@ public class WebActivity extends BaseActivity<Parcelable, ActivityWebBinding, Ba
     }
 
     private void doShare() {
-        if (mData==null) {
-            return ;
+        if (mData == null) {
+            return;
         }
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.putExtra(Intent.EXTRA_TEXT, getString(R.string.share_type_url, getString(R.string.app_name), mData.getTitle(), mData.getLink()));
@@ -95,6 +97,7 @@ public class WebActivity extends BaseActivity<Parcelable, ActivityWebBinding, Ba
     @Override
     protected void initViews() {
         super.initViews();
+        ViewCompat.setTransitionName(databinding.webView, getString(R.string.share_view));
         if (mParam != null) {
             if (mParam instanceof ArticlesData.ArticleBean) {
                 mData = (ArticlesData.ArticleBean) mParam;
@@ -103,7 +106,6 @@ public class WebActivity extends BaseActivity<Parcelable, ActivityWebBinding, Ba
                 loadWeb(mData.getLink());
             }
         }
-
 
     }
 
@@ -198,7 +200,7 @@ public class WebActivity extends BaseActivity<Parcelable, ActivityWebBinding, Ba
                 vm.verifyPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
                 break;
             case R.id.menuCollect:
-                if (mData==null)
+                if (mData == null)
                     return false;
                 vm.collectArticle(mData);
                 break;
@@ -213,10 +215,10 @@ public class WebActivity extends BaseActivity<Parcelable, ActivityWebBinding, Ba
     }
 
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_web, menu);
         return true;
     }
+
 }

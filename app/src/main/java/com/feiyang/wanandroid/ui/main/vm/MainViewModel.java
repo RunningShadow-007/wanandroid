@@ -7,7 +7,6 @@ import com.feiyang.wanandroid.ui.login.vm.LoginViewModel;
 import com.feiyang.wanandroid.ui.main.model.MainRepository;
 import com.feiyang.wanandroid.ui.main.model.bean.ArticlesData;
 import com.feiyang.wanandroid.ui.main.model.bean.BannerData;
-import com.feiyang.wanandroid.ui.main.model.bean.CollectionData;
 import com.feiyang.wanandroid.ui.main.model.bean.KnowledgeHierarchyData;
 import com.feiyang.wanandroid.ui.main.model.bean.NaviData;
 import com.feiyang.wanandroid.ui.main.model.bean.ProjectCategoryData;
@@ -47,7 +46,7 @@ public class MainViewModel extends LoginViewModel {
 
     public MutableLiveData<ArticlesData> projectArticles = new MutableLiveData<>();//项目文章列表
 
-    public MutableLiveData<CollectionData> collectDatas = new MutableLiveData<>();//收藏列表数据
+    public MutableLiveData<ArticlesData> collectDatas = new MutableLiveData<>();//收藏列表数据
 
     public MainViewModel(@NonNull Application application) {
         super(application);

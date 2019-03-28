@@ -1,5 +1,6 @@
 package com.feiyang.wanandroid.ui.knowledge.fragment;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -7,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.feiyang.wanandroid.R;
 import com.feiyang.wanandroid.base.BaseFragment;
 import com.feiyang.wanandroid.base.IPage;
 import com.feiyang.wanandroid.core.constants.LoadingType;
@@ -23,6 +25,7 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityOptionsCompat;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -128,9 +131,9 @@ public class KnowledgeListFragment extends BaseFragment<KnowledgeListFragment.Pa
         });
 
         mVm.collectData.observe(this, data -> {
-            if (data!=null) {
-                int index=  mData.indexOf(data);
-                if (index!=-1){
+            if (data != null) {
+                int index = mData.indexOf(data);
+                if (index != -1) {
                     data.setCollect(true);
                     mAdapter.notifyItemChanged(index);
                 }
@@ -174,13 +177,14 @@ public class KnowledgeListFragment extends BaseFragment<KnowledgeListFragment.Pa
                     ArticlesData.ArticleBean ab       = (ArticlesData.ArticleBean) data;
                     PageName                 pageName = PageName.WEB;
                     pageName.pageParam = ab;
-                    startPage(pageName);
+                    ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation((Activity) mContext, view, getString(R.string.share_view));
+                    startPage(pageName, options);
                 }
             });
 
             mAdapter.setOnCollectListener((view, data, pos) -> {
                 if (data instanceof ArticlesData.ArticleBean) {
-                    ArticlesData.ArticleBean ab       = (ArticlesData.ArticleBean) data;
+                    ArticlesData.ArticleBean ab = (ArticlesData.ArticleBean) data;
                     mVm.collectArticle(ab);
                 }
             });

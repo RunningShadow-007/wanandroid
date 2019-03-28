@@ -1,10 +1,12 @@
 package com.feiyang.wanandroid.ui.main.fragment;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.feiyang.wanandroid.R;
 import com.feiyang.wanandroid.base.BaseFragment;
 import com.feiyang.wanandroid.base.BaseItem;
 import com.feiyang.wanandroid.core.constants.LoadingType;
@@ -22,6 +24,7 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityOptionsCompat;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -137,7 +140,7 @@ public class MainFragment extends BaseFragment {
             }
         });
 
-        mVm.uncollectData.observe(this,data->{
+        mVm.uncollectData.observe(this, data -> {
             if (data != null) {
                 int index = mData.indexOf(data);
                 if (index != -1) {
@@ -165,7 +168,8 @@ public class MainFragment extends BaseFragment {
                     ArticlesData.ArticleBean ab       = (ArticlesData.ArticleBean) data;
                     PageName                 pageName = PageName.WEB;
                     pageName.pageParam = ab;
-                    startPage(pageName);
+                    ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation((Activity) mContext, view, getString(R.string.share_view));
+                    startPage(pageName, options);
                 }
             });
             mAdapter.setOnCollectListener((view, data, pos) -> {

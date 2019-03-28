@@ -1,16 +1,18 @@
 package com.feiyang.wanandroid.ui.main.fragment;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.feiyang.wanandroid.R;
 import com.feiyang.wanandroid.base.BaseFragment;
 import com.feiyang.wanandroid.core.constants.LoadingType;
 import com.feiyang.wanandroid.core.util.ViewModelUtils;
 import com.feiyang.wanandroid.databinding.FragmentCollectionListBinding;
 import com.feiyang.wanandroid.ui.main.adapter.CollectionListAdapter;
-import com.feiyang.wanandroid.ui.main.model.bean.CollectionData;
+import com.feiyang.wanandroid.ui.main.model.bean.ArticlesData;
 import com.feiyang.wanandroid.ui.main.vm.MainViewModel;
 
 import java.util.ArrayList;
@@ -18,6 +20,7 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityOptionsCompat;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -38,7 +41,7 @@ public class CollectionListFragment extends BaseFragment {
 
     private CollectionListAdapter mAdapter;
 
-    private List<CollectionData.DatasBean> mData = new ArrayList<>();
+    private List<ArticlesData.ArticleBean> mData = new ArrayList<>();
 
     private LoadingType mLoadingType;
 
@@ -70,6 +73,9 @@ public class CollectionListFragment extends BaseFragment {
             if (collectionData != null) {
                 mCurPageNo = collectionData.getCurPage();
                 if (isNonNull(collectionData.getDatas())) {
+                    if (mCurPageNo == 0) {
+                        mData.clear();
+                    }
                     mData.addAll(collectionData.getDatas());
                     mAdapter.notifyDataSetChanged();
                 }
@@ -123,7 +129,10 @@ public class CollectionListFragment extends BaseFragment {
         if (mAdapter == null) {
             mAdapter = new CollectionListAdapter(mData);
             mAdapter.setOnItemClickListener((view, data, pos) -> {
-
+                PageName pageName = PageName.WEB;
+                pageName.pageParam = data;
+                ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation((Activity) mContext, view, getString(R.string.share_view));
+                startPage(pageName, options);
             });
         }
         mBinding.rv.setLayoutManager(new LinearLayoutManager(mContext));
@@ -135,6 +144,7 @@ public class CollectionListFragment extends BaseFragment {
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser) {
+            mCurPageNo = 0;
             mVm.getCollectionList(mCurPageNo);
         }
     }

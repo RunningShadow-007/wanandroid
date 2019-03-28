@@ -4,7 +4,6 @@ import com.feiyang.wanandroid.base.BaseResponse;
 import com.feiyang.wanandroid.ui.login.model.bean.LoginData;
 import com.feiyang.wanandroid.ui.main.model.bean.ArticlesData;
 import com.feiyang.wanandroid.ui.main.model.bean.BannerData;
-import com.feiyang.wanandroid.ui.main.model.bean.CollectionData;
 import com.feiyang.wanandroid.ui.main.model.bean.HotWordsData;
 import com.feiyang.wanandroid.ui.main.model.bean.KnowledgeHierarchyData;
 import com.feiyang.wanandroid.ui.main.model.bean.NaviData;
@@ -147,7 +146,7 @@ public interface ApiService {
      * @return
      */
     @GET("lg/collect/list/{pageNo}/json")
-    Observable<BaseResponse<CollectionData>> getCollectionList(@Path("pageNo") int pageNo);
+    Observable<BaseResponse<ArticlesData>> getCollectionList(@Path("pageNo") int pageNo);
 
     /**
      * 收藏站内文章
@@ -195,7 +194,7 @@ public interface ApiService {
      * @return
      */
     @POST("lg/collect/usertools/json")
-    Observable<BaseResponse<CollectionData>> getCollectionSite();
+    Observable<BaseResponse<ArticlesData>> getCollectionSite();
 
     /**
      * 收藏网址

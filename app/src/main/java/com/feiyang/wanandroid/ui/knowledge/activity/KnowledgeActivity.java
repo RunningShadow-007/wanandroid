@@ -19,6 +19,7 @@ import java.util.List;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.core.content.ContextCompat;
+import androidx.core.view.ViewCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 
@@ -105,8 +106,8 @@ public class KnowledgeActivity extends BaseActivity<KnowledgeActivity.Param, Act
             actionBar.setDisplayShowTitleEnabled(false);
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
-
         databinding.title.setText(mData.getName());
+        ViewCompat.setTransitionName(databinding.title, getString(R.string.share_view));
         StatusBarUtils.setStatusColor(getWindow(), ContextCompat.getColor(this, R.color.colorPrimary), 1f);
     }
 

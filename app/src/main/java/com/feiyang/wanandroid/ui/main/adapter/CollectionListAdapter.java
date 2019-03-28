@@ -9,7 +9,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.feiyang.wanandroid.R;
 import com.feiyang.wanandroid.core.callback.OnItemClickListener;
 import com.feiyang.wanandroid.databinding.ItemCollectionListBinding;
-import com.feiyang.wanandroid.ui.main.model.bean.CollectionData;
+import com.feiyang.wanandroid.ui.main.model.bean.ArticlesData;
 
 import java.util.List;
 
@@ -24,11 +24,11 @@ import androidx.recyclerview.widget.RecyclerView;
  * Desc: <br>
  */
 public class CollectionListAdapter extends RecyclerView.Adapter<CollectionListAdapter.ViewHolder> {
-    private List<CollectionData.DatasBean> mData;
+    private List<ArticlesData.ArticleBean> mData;
 
-    private OnItemClickListener<CollectionData.DatasBean> onItemClickListener;
+    private OnItemClickListener<ArticlesData.ArticleBean> onItemClickListener;
 
-    public CollectionListAdapter(@NonNull List<CollectionData.DatasBean> data) {
+    public CollectionListAdapter(@NonNull List<ArticlesData.ArticleBean> data) {
         this.mData = data;
     }
 
@@ -41,7 +41,7 @@ public class CollectionListAdapter extends RecyclerView.Adapter<CollectionListAd
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        CollectionData.DatasBean item = mData.get(position);
+        ArticlesData.ArticleBean item = mData.get(position);
         if (item == null) {
             return;
         }
@@ -67,7 +67,7 @@ public class CollectionListAdapter extends RecyclerView.Adapter<CollectionListAd
         }
     }
 
-    public void setOnItemClickListener(OnItemClickListener<CollectionData.DatasBean> onItemClickListener) {
+    public void setOnItemClickListener(OnItemClickListener<ArticlesData.ArticleBean> onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
     }
 

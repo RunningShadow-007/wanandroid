@@ -19,6 +19,8 @@ import com.feiyang.wanandroid.R;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.ActivityOptionsCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.databinding.ViewDataBinding;
 import androidx.lifecycle.ViewModel;
@@ -77,9 +79,9 @@ public abstract class BaseActivity<Param extends Parcelable, D extends ViewDataB
 
     protected void initArgs(@Nullable Bundle savedInstanceState) {
         if (savedInstanceState != null) {
-            mParam =  savedInstanceState.getParcelable(IPage.PAGE_PARAM);
+            mParam = savedInstanceState.getParcelable(IPage.PAGE_PARAM);
         } else {
-            mParam =  getIntent().getParcelableExtra(IPage.PAGE_PARAM);
+            mParam = getIntent().getParcelableExtra(IPage.PAGE_PARAM);
         }
     }
 
@@ -208,7 +210,7 @@ public abstract class BaseActivity<Param extends Parcelable, D extends ViewDataB
         }
         if (vm != null) {
             if (vm instanceof BaseViewModel) {
-                ((BaseViewModel)vm).dispose();
+                ((BaseViewModel) vm).dispose();
             }
 
         }
@@ -216,10 +218,19 @@ public abstract class BaseActivity<Param extends Parcelable, D extends ViewDataB
 
     @Override
     public void startPage(PageName pageName) {
+        startPage(pageName, null);
+    }
+
+    @Override
+    public void startPage(PageName pageName, ActivityOptionsCompat options) {
         Intent intent = new Intent(this, pageName.target);
         intent.putExtra(IPage.PAGE_PARAM, pageName.pageParam);
         pageName.pageParam = null;
-        startActivity(intent);
+        if (options != null) {
+            ActivityCompat.startActivity(this, intent, options.toBundle());
+        } else {
+            startActivity(intent);
+        }
     }
 
     @Override

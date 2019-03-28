@@ -6,7 +6,6 @@ import com.feiyang.wanandroid.core.net.ServiceProvider;
 import com.feiyang.wanandroid.core.util.Optional;
 import com.feiyang.wanandroid.ui.main.model.bean.ArticlesData;
 import com.feiyang.wanandroid.ui.main.model.bean.BannerData;
-import com.feiyang.wanandroid.ui.main.model.bean.CollectionData;
 import com.feiyang.wanandroid.ui.main.model.bean.HotWordsData;
 import com.feiyang.wanandroid.ui.main.model.bean.KnowledgeHierarchyData;
 import com.feiyang.wanandroid.ui.main.model.bean.NaviData;
@@ -124,7 +123,7 @@ public class MainRepository {
      * @param pageNo
      * @return
      */
-    public Observable<Optional<CollectionData>> getCollectionList(int pageNo) {
+    public Observable<Optional<ArticlesData>> getCollectionList(int pageNo) {
         return NetworkObserver.on(mRemote.getCollectionList(pageNo));
     }
 

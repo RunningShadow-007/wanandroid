@@ -6,6 +6,8 @@ import com.feiyang.wanandroid.ui.knowledge.activity.KnowledgeActivity;
 import com.feiyang.wanandroid.ui.login.activity.LoginActivity;
 import com.feiyang.wanandroid.ui.main.activity.MainActivity;
 
+import androidx.core.app.ActivityOptionsCompat;
+
 /**
  * Copyright:wanandroid2
  * Author: liyang <br>
@@ -16,6 +18,8 @@ public interface IPage {
     String PAGE_PARAM = "PAGE_PARAM";
 
     void startPage(PageName pageName);
+
+    void startPage(PageName pageName, ActivityOptionsCompat options);
 
     void startPageForResult(PageName pageName, int requestCode);
 

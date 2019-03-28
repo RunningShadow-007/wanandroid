@@ -7,13 +7,20 @@
 
         <variable
             name="item"
-            type="com.feiyang.wanandroid.ui.main.model.bean.CollectionData.DatasBean" />
+            type="com.feiyang.wanandroid.ui.main.model.bean.ArticlesData.ArticleBean" />
+
+        <import type="android.text.TextUtils" />
+
+        <import type="android.view.View" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        android:elevation="5dp"
         android:background="@drawable/bg_shape_solid_white_radius_5dp"
         android:paddingBottom="10dp">
 
@@ -50,17 +57,37 @@
             app:layout_constraintEnd_toEndOf="parent"
             tools:text="程序亦非猿" />
 
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="10dp"
+            android:ellipsize="middle"
+            android:gravity="center_vertical"
+            android:singleLine="true"
+            android:text="@{item.title??@string/empty}"
+            android:textColor="@color/textColor333"
+            android:textSize="16sp"
+            android:visibility="@{TextUtils.isEmpty(item.title)?View.GONE:View.VISIBLE}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvAuthor"
+            app:layout_constraintWidth_percent="0.6"
+            tools:text="《MVVM架构》"
+            tools:visibility="visible" />
+
         <com.feiyang.wanandroid.core.widget.MarqueeTextView
             android:id="@+id/tvDescription"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="30dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="10dp"
             android:layout_marginEnd="30dp"
             android:text="@{item.desc}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvAuthor"
+            app:layout_constraintTop_toBottomOf="@id/tvTitle"
+            app:layout_goneMarginTop="@dimen/dp_20"
             tools:text="组件化Android开发组件化Android开发组件化Android开发组件化Android开发组件化Android开发组件化Android开发组件化Android开发组件化Android开发" />
 
         <ImageView
