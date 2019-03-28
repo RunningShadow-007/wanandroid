@@ -194,4 +194,6 @@ public abstract class BaseFragment<Param extends Parcelable> extends Fragment im
             mLoadingDialog = null;
         }
     }
+
+
 }

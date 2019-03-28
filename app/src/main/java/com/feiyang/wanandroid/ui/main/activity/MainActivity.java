@@ -14,24 +14,30 @@ import com.feiyang.wanandroid.core.constants.Constants;
 import com.feiyang.wanandroid.core.util.SpUtils;
 import com.feiyang.wanandroid.core.util.StatusBarUtils;
 import com.feiyang.wanandroid.databinding.ActivityMainBinding;
+import com.feiyang.wanandroid.ui.main.fragment.CollectionListFragment;
 import com.feiyang.wanandroid.ui.main.fragment.KnowledgeHierarchyFragment;
 import com.feiyang.wanandroid.ui.main.fragment.MainFragment;
 import com.feiyang.wanandroid.ui.main.fragment.NavigationFragment;
 import com.feiyang.wanandroid.ui.main.fragment.ProjectFragment;
+import com.feiyang.wanandroid.ui.main.fragment.SettingFragment;
 import com.feiyang.wanandroid.ui.main.vm.MainViewModel;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.core.content.ContextCompat;
+import androidx.core.view.GravityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentStatePagerAdapter;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
 
 public class MainActivity extends BaseActivity<MainActivity.Param, ActivityMainBinding, MainViewModel> {
 
     private Fragment[] fragments;
+
+    private Fragment collectFragment, settingFragment, aboutFragment;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -204,10 +210,58 @@ public class MainActivity extends BaseActivity<MainActivity.Param, ActivityMainB
                     vm.logout();
                     break;
                 case R.id.nav_item_my_collect:
+                    databinding.vp.setVisibility(View.GONE);
+                    databinding.toolbar.setVisibility(View.GONE);
+                    databinding.bottomNavigationView.setVisibility(View.GONE);
+                    FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                    if (collectFragment == null) {
+                        collectFragment = CollectionListFragment.newInstance();
+                    }
+                    if (!collectFragment.isAdded()) {
+                        transaction.add(R.id.container, collectFragment);
+                    }
+                    if (settingFragment != null && settingFragment.isAdded()) {
+                        transaction.hide(settingFragment);
+                    }
+                    transaction.show(collectFragment)
+                               .commit();
+                    if (collectFragment.isHidden()) {
+                        collectFragment.setUserVisibleHint(true);
+                    }
+                    databinding.drawer.closeDrawer(GravityCompat.START);
                     break;
                 case R.id.nav_item_setting:
+                    databinding.vp.setVisibility(View.GONE);
+                    databinding.toolbar.setVisibility(View.GONE);
+                    databinding.bottomNavigationView.setVisibility(View.GONE);
+                    FragmentTransaction transaction1 = getSupportFragmentManager().beginTransaction();
+                    if (settingFragment == null) {
+                        settingFragment = SettingFragment.newInstance();
+                    }
+                    if (!settingFragment.isAdded()) {
+                        transaction1.add(R.id.container, settingFragment);
+                    }
+                    if (collectFragment != null && collectFragment.isAdded()) {
+                        transaction1.hide(collectFragment);
+                    }
+                    transaction1.show(settingFragment)
+                                .commit();
+                    databinding.drawer.closeDrawer(GravityCompat.START);
                     break;
                 case R.id.nav_item_wan_android:
+                    databinding.vp.setVisibility(View.VISIBLE);
+                    databinding.toolbar.setVisibility(View.VISIBLE);
+                    databinding.bottomNavigationView.setVisibility(View.VISIBLE);
+
+                    FragmentTransaction transaction2 = getSupportFragmentManager().beginTransaction();
+                    if (collectFragment != null && collectFragment.isAdded()) {
+                        transaction2.hide(collectFragment);
+                    }
+                    if (settingFragment != null && settingFragment.isAdded()) {
+                        transaction2.hide(settingFragment);
+                    }
+                    transaction2.commit();
+                    databinding.drawer.closeDrawer(GravityCompat.START);
                     break;
             }
             return true;
@@ -232,7 +286,7 @@ public class MainActivity extends BaseActivity<MainActivity.Param, ActivityMainB
     protected void observeData() {
         super.observeData();
         vm.isLogoutSuccess.observe(this, isLogout -> {
-            if (isLogout!=null&&isLogout){
+            if (isLogout != null && isLogout) {
                 SpUtils.invalidLogin();
                 goLogin();
             }

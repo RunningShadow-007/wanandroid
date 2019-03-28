@@ -68,6 +68,11 @@
                 app:labelVisibilityMode="labeled"
                 app:layout_behavior="@string/bye_burger_bottom_behavior"
                 app:menu="@menu/bottom_navigation_main" />
+
+            <FrameLayout
+                android:id="@+id/container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
         <com.google.android.material.navigation.NavigationView

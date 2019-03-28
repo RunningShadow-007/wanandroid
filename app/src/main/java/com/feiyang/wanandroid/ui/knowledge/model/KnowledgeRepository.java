@@ -20,7 +20,7 @@ public class KnowledgeRepository {
     private ApiService mRemote;
 
     private KnowledgeRepository() {
-        mRemote = ServiceProvider.getInstance().provide(ApiService.class);
+        mRemote = ServiceProvider.getInstance().createApiService();
     }
 
     public static KnowledgeRepository getInstance() {

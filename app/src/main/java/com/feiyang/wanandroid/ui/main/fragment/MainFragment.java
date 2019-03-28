@@ -47,9 +47,9 @@ public class MainFragment extends BaseFragment {
 
     private BaseItem mHeaderData = null;
 
+
     public static MainFragment newInstance() {
-        MainFragment fragment = new MainFragment();
-        return fragment;
+        return new MainFragment();
     }
 
     @Override

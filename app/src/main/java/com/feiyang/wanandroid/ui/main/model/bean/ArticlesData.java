@@ -216,13 +216,16 @@ public class ArticlesData implements Parcelable {
             if (obj == null) {
                 return false;
             }
-            ArticleBean bean = (ArticleBean) obj;
-            boolean     a, b, c, d, e;
-            if (bean.apkLink != null) {
-                a = bean.apkLink.equals(apkLink);
+            if (obj instanceof ArticleBean) {
+                ArticleBean bean = (ArticleBean) obj;
+                boolean     a    = false, b, c, d, e;
+                if (bean.apkLink != null) {
+                    a = bean.apkLink.equals(apkLink);
+                }
+                b = bean.collect == collect;
+                c = bean.id == id;
+                return a && b && c;
             }
-            b = bean.collect==collect;
-
 
             return super.equals(obj);
         }

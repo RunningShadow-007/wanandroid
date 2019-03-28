@@ -6,9 +6,12 @@ import com.feiyang.wanandroid.core.constants.Constants;
 import com.feiyang.wanandroid.core.net.interceptor.CacheInterceptor;
 import com.feiyang.wanandroid.core.net.interceptor.ReadCookieInterceptor;
 import com.feiyang.wanandroid.core.net.interceptor.SaveCookieInterceptor;
+import com.feiyang.wanandroid.core.util.GsonTypeAdapterFactory;
 import com.franmontiel.persistentcookiejar.PersistentCookieJar;
 import com.franmontiel.persistentcookiejar.cache.SetCookieCache;
 import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.io.File;
 import java.security.KeyManagementException;
@@ -37,9 +40,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * Desc: <br>
  */
 public class ServiceProvider {
-    private static final String BASE_URL = "http://www.wanandroid.com/";
+    private static final String BASE_URL = "https://www.wanandroid.com/";
 
-    public static final String BASE_URLS = "https://www.wanandroid.com/";
 
     private static final int DEFAULT_TIME_OUT = 20000;
 
@@ -93,17 +95,21 @@ public class ServiceProvider {
 
     }
 
-    public Retrofit getRetrofit() {
-        return getRetrofit(BASE_URL);
-    }
 
-    public Retrofit getRetrofit(String baseUrl) {
-        return new Retrofit.Builder()
-                .baseUrl(baseUrl)
-                .client(mOkHttpClient)
-                .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .build();
+    public Retrofit getRetrofit() {
+        if (retrofit == null) {
+            Gson gson = new GsonBuilder()
+                    .registerTypeAdapterFactory(new GsonTypeAdapterFactory())
+                    .create();
+            retrofit = new Retrofit
+                    .Builder()
+                    .baseUrl(BASE_URL)
+                    .client(mOkHttpClient)
+                    .addConverterFactory(GsonConverterFactory.create(gson))
+                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                    .build();
+        }
+        return retrofit;
     }
 
     public <T> T provide(Class<T> apiClass) {
@@ -119,6 +125,10 @@ public class ServiceProvider {
             }
         }
         return api;
+    }
+
+    public ApiService createApiService() {
+        return provide(ApiService.class);
     }
 
     private SSLSocketFactory initSSLFactory(X509TrustManager trustManager) throws NoSuchAlgorithmException, KeyManagementException {

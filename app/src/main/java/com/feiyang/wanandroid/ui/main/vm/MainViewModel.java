@@ -7,6 +7,7 @@ import com.feiyang.wanandroid.ui.login.vm.LoginViewModel;
 import com.feiyang.wanandroid.ui.main.model.MainRepository;
 import com.feiyang.wanandroid.ui.main.model.bean.ArticlesData;
 import com.feiyang.wanandroid.ui.main.model.bean.BannerData;
+import com.feiyang.wanandroid.ui.main.model.bean.CollectionData;
 import com.feiyang.wanandroid.ui.main.model.bean.KnowledgeHierarchyData;
 import com.feiyang.wanandroid.ui.main.model.bean.NaviData;
 import com.feiyang.wanandroid.ui.main.model.bean.ProjectCategoryData;
@@ -46,6 +47,8 @@ public class MainViewModel extends LoginViewModel {
 
     public MutableLiveData<ArticlesData> projectArticles = new MutableLiveData<>();//项目文章列表
 
+    public MutableLiveData<CollectionData> collectDatas = new MutableLiveData<>();//收藏列表数据
+
     public MainViewModel(@NonNull Application application) {
         super(application);
         mRepository = MainRepository.getInstance();
@@ -54,7 +57,7 @@ public class MainViewModel extends LoginViewModel {
     public void getBannerList() {
         Disposable subscribe = mRepository.getBannerList()
                                           .subscribe(bannerData -> {
-                                                  bannerList.postValue(bannerData.orElse(null));
+                                              bannerList.postValue(bannerData.orElse(null));
                                           });
         disposable.add(subscribe);
     }
@@ -69,7 +72,7 @@ public class MainViewModel extends LoginViewModel {
                                           .doOnSubscribe(disposable -> loading.postValue(true))
                                           .doOnTerminate(() -> loading.postValue(false))
                                           .subscribe(articlesData -> {
-                                              if (articlesData.isPresent()){
+                                              if (articlesData.isPresent()) {
                                                   pageCount.postValue(articlesData.get().getPageCount());
                                                   articleList.postValue(articlesData.get().getDatas());
                                               }
@@ -93,7 +96,6 @@ public class MainViewModel extends LoginViewModel {
     }
 
 
-
     /**
      * 导航数据
      *
@@ -104,7 +106,7 @@ public class MainViewModel extends LoginViewModel {
                                           .doOnSubscribe(disposable -> loading.postValue(true))
                                           .doOnTerminate(() -> loading.postValue(false))
                                           .subscribe(naviData -> {
-                                                  navList.postValue(naviData.orElse(null));
+                                              navList.postValue(naviData.orElse(null));
                                           }, throwable -> Log.e(TAG, "getNaviList: ", throwable));
         disposable.add(subscribe);
     }
@@ -136,6 +138,17 @@ public class MainViewModel extends LoginViewModel {
                                               projectArticles.postValue(data.orElse(null));
                                           }, throwable -> Log.e(TAG, "getProjectCateList", throwable));
         disposable.add(subscribe);
+    }
+
+    public void getCollectionList(int pageNo) {
+        Disposable subscribe = mRepository.getCollectionList(pageNo)
+                                          .doOnSubscribe(disposable -> loading.postValue(true))
+                                          .doOnTerminate(() -> loading.postValue(false))
+                                          .subscribe(data -> {
+                                              collectDatas.postValue(data.orElse(null));
+                                          }, throwable -> Log.e(TAG, "getCollectionList: ", throwable));
+        disposable.add(subscribe);
+
     }
 
 }

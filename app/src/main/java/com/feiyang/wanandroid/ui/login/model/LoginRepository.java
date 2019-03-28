@@ -27,7 +27,7 @@ public class LoginRepository {
     private UserDao mLocal;
 
     private LoginRepository() {
-        mRemote = ServiceProvider.getInstance().getRetrofit(ServiceProvider.BASE_URLS).create(ApiService.class);
+        mRemote = ServiceProvider.getInstance().createApiService();
         mLocal = Db.getInstance().getUserDao();
     }
 

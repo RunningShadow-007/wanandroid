@@ -56,7 +56,7 @@ public class BaseViewModel extends AndroidViewModel {
     }
 
     public void collectArticle(@NonNull ArticlesData.ArticleBean bean) {
-        ApiService service = ServiceProvider.getInstance().provide(ApiService.class);
+        ApiService service  = ServiceProvider.getInstance().createApiService();
         if (!TextUtils.isEmpty(bean.getLink())) {
 //            boolean isInner = bean.getLink().contains("wanandroid.com");
 //            if (isInner) {
@@ -98,7 +98,7 @@ public class BaseViewModel extends AndroidViewModel {
      * @param isFromCollection 是否来自我的收藏页
      */
     public void uncollect(@NonNull ArticlesData.ArticleBean bean,boolean isFromCollection) {
-        ApiService service = ServiceProvider.getInstance().provide(ApiService.class);
+        ApiService service = ServiceProvider.getInstance().createApiService();
         if (!TextUtils.isEmpty(bean.getLink())) {
             //收藏站内文章
             Disposable subscribe = NetworkObserver.on(isFromCollection ? service.uncollect(bean.getId(), bean.getOriginId()) : service.uncollect(bean.getId()))

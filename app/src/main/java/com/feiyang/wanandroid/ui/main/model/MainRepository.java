@@ -6,6 +6,7 @@ import com.feiyang.wanandroid.core.net.ServiceProvider;
 import com.feiyang.wanandroid.core.util.Optional;
 import com.feiyang.wanandroid.ui.main.model.bean.ArticlesData;
 import com.feiyang.wanandroid.ui.main.model.bean.BannerData;
+import com.feiyang.wanandroid.ui.main.model.bean.CollectionData;
 import com.feiyang.wanandroid.ui.main.model.bean.HotWordsData;
 import com.feiyang.wanandroid.ui.main.model.bean.KnowledgeHierarchyData;
 import com.feiyang.wanandroid.ui.main.model.bean.NaviData;
@@ -31,7 +32,7 @@ public class MainRepository {
     private ApiService mRemote;
 
     private MainRepository() {
-        mRemote = ServiceProvider.getInstance().provide(ApiService.class);
+        mRemote = ServiceProvider.getInstance().createApiService();
     }
 
     public static MainRepository getInstance() {
@@ -66,7 +67,6 @@ public class MainRepository {
     public Observable<Optional<List<KnowledgeHierarchyData>>> getKnowledgeHierarchyList() {
         return NetworkObserver.on(mRemote.getKnowledgeHierarchyList());
     }
-
 
 
     /**
@@ -116,6 +116,16 @@ public class MainRepository {
      */
     public Observable<Optional<ArticlesData>> getProjectArticles(int pageNo, int cid) {
         return NetworkObserver.on(mRemote.getProjectArticles(pageNo, cid));
+    }
+
+    /**
+     * 获取收藏列表
+     *
+     * @param pageNo
+     * @return
+     */
+    public Observable<Optional<CollectionData>> getCollectionList(int pageNo) {
+        return NetworkObserver.on(mRemote.getCollectionList(pageNo));
     }
 
 }
