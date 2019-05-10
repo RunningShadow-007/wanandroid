@@ -1,5 +1,5 @@
 # wanandroid
-根据wanandroid开放接口,采用mvvm,android jet
+根据wanandroid开放接口,采用mvvm,android jetpack
 采用ViewModel+LiveData+Room+Retrofit+RxJava
 
 架构图
